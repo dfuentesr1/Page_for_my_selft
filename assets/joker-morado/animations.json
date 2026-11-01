@@ -1,0 +1,26 @@
+{
+  "idle": {
+    "frames": 4,
+    "frame_size": [
+      64,
+      64
+    ],
+    "sheet": "idle_east_sheet.png"
+  },
+  "walk": {
+    "frames": 8,
+    "frame_size": [
+      64,
+      64
+    ],
+    "sheet": "walk_east_sheet.png"
+  },
+  "cast": {
+    "frames": 6,
+    "frame_size": [
+      64,
+      64
+    ],
+    "sheet": "cast_east_sheet.png"
+  }
+}
