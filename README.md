@@ -34,8 +34,10 @@ mapa de Cuphead. Abre `mapa-feria/index.html` en el navegador; no necesita servi
 - **Profundidad:** cada objeto se ordena por su coordenada Y, así el jugador pasa por
   delante o por detrás de árboles y edificios.
 - **Isla con volumen:** acantilado visible en las costas del sur, espuma animada y aguas someras.
-- **Estilo cartoon de los años 30:** contorno de tinta grueso, trazo que tiembla a 12 fps
-  (3 variantes por sprite), tinte sepia, viñeta, grano de película, polvo y rayas.
+- **Estilo cartoon de los años 30:** formas blandas y abombadas, volumen pintado (brillo arriba a la
+  izquierda y sombra abajo a la derecha), línea de tinta más gruesa en el lado de la sombra, copas de
+  árbol con un único contorno exterior, suelo de acuarela, trazo que tiembla a 12 fps (3 variantes por
+  sprite), tinte sepia, viñeta, grano de película, polvo y rayas.
 - **Niveles:** cada atracción tiene una bandera (gris pendiente, roja visitada), un botón
   "Z" flotante y una tarjeta de título. Al entrar se cierra un iris sobre el jugador.
 
@@ -51,7 +53,9 @@ mapa de Cuphead. Abre `mapa-feria/index.html` en el navegador; no necesita servi
 | 5 | La Noria Lunar |
 | Jefe | ¡La Gran Función! (Gran Carpa) |
 
-Extras: 4 monedas escondidas, martillo de fuerza, taquilla, poste indicador y caseta de tiro.
+Extras: 4 monedas escondidas, martillo de fuerza, taquilla, poste indicador y caseta de tiro (vende las armas).
+
+Historia y armas del juego: [`docs/historia-y-armas.md`](docs/historia-y-armas.md).
 Controles: flechas/WASD para moverse; Z, Intro o Espacio para interactuar; X o Esc para volver;
 joystick táctil en móvil.
 
