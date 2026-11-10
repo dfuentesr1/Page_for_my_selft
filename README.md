@@ -53,9 +53,12 @@ mapa de Cuphead. Abre `mapa-feria/index.html` en el navegador; no necesita servi
 | 5 | La Noria Lunar |
 | Jefe | ¡La Gran Función! (Gran Carpa) |
 
+Viajes: el globo de la costa suroeste abre el selector de mundos (Isla Cascabel, Valle Encantado,
+Pantano Lúgubre y Ciudadela Infernal; los tres últimos aún cerrados).
+
 Extras: 4 monedas escondidas, martillo de fuerza, taquilla, poste indicador y caseta de tiro (vende las armas).
 
-Historia y armas del juego: [`docs/historia-y-armas.md`](docs/historia-y-armas.md).
+Historia, armas y mundos del juego: [`docs/historia-y-armas.md`](docs/historia-y-armas.md).
 Controles: flechas/WASD para moverse; Z, Intro o Espacio para interactuar; X o Esc para volver;
 joystick táctil en móvil.
 

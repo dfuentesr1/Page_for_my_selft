@@ -29,3 +29,23 @@ La introducción se presentará como una secuencia de viñetas de cómic antes d
 | Sifones de ácido | Sifones cargados con ácido. |
 
 En el mapa, las armas se venden en la Caseta de tiro (islote de la derecha).
+
+## Mundos
+La idea es que haya varios mundos de estilos distintos y que se pueda viajar entre ellos.
+En el mapa, el **globo de viajes** (costa suroeste de la Isla Cascabel) abre el selector de mundos.
+Los mundos que aún no existen aparecen como cerrados. Cada ruta se abre al vencer al jefe del mundo anterior.
+
+Los jefes son originales. La lista siguiente es una **propuesta** para que la revise el autor:
+
+| # | Mundo | Tipo | Ambiente | Jefes propuestos |
+|---|---|---|---|---|
+| 1 | Isla Cascabel | Feria | Atracciones, payasos y la Gran Carpa | El dueño de la carpa (por definir) |
+| 2 | Valle Encantado | Fantasía | Setas gigantes, hadas, castillo flotante | La Reina Tetera Hechicera · el Ogro Barón Mermelada · el Dragón de Papel Maché |
+| 3 | Pantano Lúgubre | Siniestro | Niebla, juguetes rotos, marionetas abandonadas | Madame Marioneta (sus hilos mueven el escenario) · Míster Muelle (caja sorpresa gigante) · el Barquero sin Sombra |
+| 4 | Ciudadela Infernal | Malvado | Calderas, ríos de lava, fábricas | El Capataz de Hierro · el Gran Jefe, el último y más cruel |
+
+Posible enlace con la historia: el jefe final podría ser el mismo "jefe" que los despidió al principio.
+
+### Pendiente de definir
+- Número final de mundos y su orden.
+- Si el viaje es siempre en globo o cambia según el mundo (barco, tren fantasma, cañón...).

@@ -29,6 +29,7 @@ html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(-
 #banner .b2{font-family:var(--display);font-size:clamp(14px,2.6vw,20px);color:var(--gold);text-shadow:2px 2px 0 var(--ink);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
 .overlay{position:fixed;inset:0;display:grid;place-items:center;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
 .card{position:relative;width:min(440px,100%);background:var(--paper);color:var(--ink);border:4px solid var(--ink);border-radius:18px 12px 20px 14px;padding:22px 24px 20px;box-shadow:8px 8px 0 rgba(0,0,0,.55);text-align:center;animation:cardIn .45s cubic-bezier(.2,1.6,.4,1) both;background-image:radial-gradient(rgba(120,80,30,.12) 1px,transparent 1.4px);background-size:5px 5px}
+.overlay .card{max-height:calc(100% - 32px);overflow:auto}
 .card::before{content:"";position:absolute;inset:7px;border:2px solid var(--ink);border-radius:12px 8px 14px 10px;pointer-events:none}
 @keyframes cardIn{from{transform:scale(.4) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
 .kind{display:inline-block;font-family:var(--display);font-size:13px;letter-spacing:.18em;text-transform:uppercase;background:var(--wine);color:var(--paper);padding:4px 14px;border:2px solid var(--ink);border-radius:4px;transform:rotate(-2deg)}
@@ -45,6 +46,15 @@ html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(-
 #dialog .more{text-align:right;font-family:var(--display);font-size:13px;opacity:.7}
 #stage{background:#000}
 #stage .card{max-width:420px}
+.wlist{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px;text-align:left}
+.wbtn{width:100%;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:10px 7px 11px 8px;padding:8px 12px;font-family:var(--body);font-size:15px;text-align:left;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.wbtn .wn{font-family:var(--display);font-size:18px;color:var(--navy)}
+.wbtn .wd{grid-column:1/-1;line-height:1.3}
+.wbtn .ws{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border:2px solid var(--ink);border-radius:4px;background:var(--paper-dark)}
+.wbtn.here .ws{background:var(--gold)}
+.wbtn.locked{opacity:.78}
+.wbtn.sel,.wbtn:hover{background:#f6e9c6;outline:3px dashed var(--wine);outline-offset:2px}
+.wmsg{min-height:1.4em;font-style:italic;color:var(--wine)}
 .touch{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);display:none;pointer-events:auto}
 @media (pointer:coarse){.touch{display:block}.help{display:none}}
 #stick{left:max(18px,env(safe-area-inset-left,0px));width:120px;height:120px;border-radius:50%;border:3px solid rgba(239,226,194,.7);background:rgba(42,29,23,.25)}
@@ -82,6 +92,17 @@ html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(-
     <h2 id="sTitle">Nivel</h2>
     <p>Este nivel aún se está montando. Aquí empezará la fase de juego.</p>
     <div class="btns"><button class="btn sel" id="bStage" type="button">Volver al mapa</button></div>
+  </div>
+</div>
+
+<div id="worlds" class="overlay" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+    <span class="kind">Globo de viajes</span>
+    <h2 id="wTitle">¿A qué mundo vamos?</h2>
+    <ul id="wList" class="wlist"></ul>
+    <p id="wMsg" class="wmsg"></p>
+    <div class="btns"><button class="btn" id="bWClose" type="button">Quedarse aquí</button></div>
+    <div class="keyhint">↑ ↓ elegir · Z / Intro: viajar · X / Esc: cerrar</div>
   </div>
 </div>
 
@@ -584,6 +605,33 @@ function drawDuck(ctx,t,x,y){
   ctx.restore();
 }
 
+/* globo aerostático: punto de viaje entre mundos */
+function drawBalloon(ctx,t){
+  const bob=Math.sin(t*1.4)*5,sway=Math.sin(t*.9)*.04;
+  shadowB(ctx,0,0,58,14);
+  // poste de amarre y cartel
+  fig(ctx,rectP(-70,-62,-60,0),{fill:C.wood,lw:2.6});
+  fig(ctx,[[-104,-90],[-26,-86],[-28,-58],[-102,-62]],{fill:C.cream,lw:2.8});label(ctx,'VIAJES',-65,-74,13,C.wine);
+  ctx.strokeStyle=C.ink;ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(-60,-30);ctx.quadraticCurveTo(-34,-10+bob*.5,-18,-30+bob);ctx.stroke();
+  ctx.save();ctx.translate(0,bob);ctx.rotate(sway);
+  // cuerdas
+  [[-18,-44,-40,-112],[18,-44,40,-112],[-6,-44,-14,-104],[6,-44,14,-104]].forEach(([a,b,c,d])=>{ctx.lineWidth=1.6;ctx.strokeStyle=C.ink;ctx.beginPath();ctx.moveTo(a,b);ctx.lineTo(c,d);ctx.stroke()});
+  // cesta de mimbre
+  fig(ctx,[[-22,-46],[22,-46],[18,-16],[-18,-16]],{fill:C.wood,lw:2.8,amt:.6},()=>{ctx.strokeStyle='rgba(70,40,20,.55)';ctx.lineWidth=1.4;for(let y=-42;y<-16;y+=6){ctx.beginPath();ctx.moveTo(-24,y);ctx.lineTo(24,y);ctx.stroke()}});
+  fig(ctx,rectP(-25,-50,25,-43),{fill:C.woodD,lw:2.4,amt:.5});
+  // sacos de lastre
+  oval(ctx,-25,-34,5,7,C.cream,{lw:2,amt:.3});oval(ctx,25,-32,5,7,C.cream,{lw:2,amt:.3});
+  // globo a gajos
+  const env=[[0,-102],[-30,-116],[-58,-150],[-62,-196],[-40,-238],[0,-252],[40,-238],[62,-196],[58,-150],[30,-116]];
+  fig(ctx,catmull(env.concat([env[0]]),5),{fill:C.cream,lw:3.4,amt:.7},()=>{
+    for(let i=-3;i<=3;i+=2){ctx.fillStyle=C.navy;ctx.beginPath();ctx.moveTo(0,-104);ctx.quadraticCurveTo(i*22,-170,0,-254);ctx.quadraticCurveTo((i+1)*22,-170,0,-104);ctx.fill()}
+    ctx.fillStyle=C.red;ctx.fillRect(-70,-170,140,14);
+    [-40,-14,14,40].forEach(x=>star(ctx,x,-163,5,C.goldL));
+  });
+  fig(ctx,[[-16,-108],[16,-108],[12,-98],[-12,-98]],{fill:C.gold,lw:2.4,amt:.4});
+  ctx.restore();
+}
+
 /* ---------- marcador provisional del jugador (sustituible por el sprite definitivo) ---------- */
 function drawPlayerToken(ctx,t,pl){
   const bob=pl.moving?-Math.abs(Math.sin(pl.phase))*5:Math.sin(t*2.5)*1.5;
@@ -670,6 +718,8 @@ function buildWorld(){
     'Tartas granada: crema por fuera y metralla por dentro.',
     'Sifones de ácido: un chorro que lo derrite todo.',
     state.coins<4?`Llevas ${state.coins} de 4 monedas. Hay más escondidas por la isla.`:'¡Cuatro monedas! Ya puedes comprar tu primera arma.']});
+  liveObj(650,1495,drawBalloon,[-110,-270,70,16],{dy:-8,rx:40,ry:14});
+  interactables.push({x:650,y:1530,r:58,type:'travel',h:110});
   interactables.push({x:1400,y:1392,r:46,type:'talk',who:'Poste indicador',h:40,lines:()=>['Arriba: Casa de la Risa y la Noria. Izquierda: Carrusel y Cañón. Derecha: Montaña Rusa y la caseta de tiro.']});
   interactables.push({x:600,y:915,r:58,type:'striker',who:'Martillo de fuerza',h:70});
   interactables.push({x:1140,y:1610,r:46,type:'talk',who:'Taquilla',h:40,lines:()=>['Bienvenido a la Isla Cascabel.','Cada atracción es un nivel. La Gran Carpa guarda al jefe final.']});
@@ -915,6 +965,37 @@ function postFX(){
     ctx.fillStyle='#000';ctx.beginPath();ctx.rect(0,0,cw,ch);ctx.arc(px,py,Math.max(0,iris.r),0,Math.PI*2,true);ctx.fill('evenodd')}
 }
 
+/* ---------- mundos ---------- */
+const WORLDS=[
+  {id:'feria',n:'Isla Cascabel',tipo:'Feria',d:'Atracciones, payasos y la Gran Carpa.',open:true},
+  {id:'fantasia',n:'Valle Encantado',tipo:'Fantasía',d:'Setas gigantes, hadas y un castillo que flota sobre las nubes.'},
+  {id:'pantano',n:'Pantano Lúgubre',tipo:'Siniestro',d:'Niebla, juguetes rotos y marionetas que ya no tienen dueño.'},
+  {id:'infierno',n:'Ciudadela Infernal',tipo:'Malvado',d:'Calderas, ríos de lava y los jefes más crueles.'}
+];
+let wSel=0;
+function openWorlds(){
+  mode='worlds';wSel=0;$('wMsg').textContent='';
+  const ul=$('wList');ul.textContent='';
+  WORLDS.forEach((w,i)=>{
+    const li=document.createElement('li'),b=document.createElement('button');
+    b.type='button';b.className='wbtn'+(i===0?' here':'')+(w.open?'':' locked');
+    const n=document.createElement('span');n.className='wn';n.textContent=`${i+1}. ${w.n}`;
+    const st=document.createElement('span');st.className='ws';st.textContent=i===0?'Estás aquí':w.open?w.tipo:'Cerrado';
+    const d=document.createElement('span');d.className='wd';d.textContent=`${w.tipo}. ${w.d}`;
+    b.append(n,st,d);b.onclick=e=>{e.stopPropagation();wSel=i;pickWorld()};
+    b.onmouseenter=()=>{wSel=i;markWorld()};
+    li.append(b);ul.append(li);
+  });
+  markWorld();$('worlds').hidden=false;
+}
+function markWorld(){[...document.querySelectorAll('.wbtn')].forEach((b,i)=>b.classList.toggle('sel',i===wSel))}
+function pickWorld(){
+  const w=WORLDS[wSel];
+  $('wMsg').textContent=wSel===0?'Ya estás en la Isla Cascabel.':`Ruta cerrada: vence al jefe de ${WORLDS[wSel-1].n} para viajar a ${w.n}.`;
+}
+function closeWorlds(){$('worlds').hidden=true;mode='map'}
+document.getElementById('bWClose').onclick=e=>{e.stopPropagation();closeWorlds()};
+
 /* ---------- UI: tarjeta de nivel, diálogos, escenario ---------- */
 const $=id=>document.getElementById(id);
 function openCard(id){
@@ -948,15 +1029,18 @@ function action(){
     if(current.type==='level')openCard(current.id);
     else if(current.type==='talk')talk(current.who,current.lines());
     else if(current.type==='striker')hitStriker();
+    else if(current.type==='travel')openWorlds();
   } else if(mode==='card')goLevel();
   else if(mode==='dialog')advance();
   else if(mode==='stage')backFromStage();
+  else if(mode==='worlds')pickWorld();
 }
-function back(){if(mode==='card')closeCard();else if(mode==='dialog')advance();else if(mode==='stage')backFromStage()}
+function back(){if(mode==='worlds')closeWorlds();else if(mode==='card')closeCard();else if(mode==='dialog')advance();else if(mode==='stage')backFromStage()}
 addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(e.repeat){keys[e.code]=true;return}
   keys[e.code]=true;
+  if(mode==='worlds'&&(e.code==='ArrowUp'||e.code==='ArrowDown'||e.code==='KeyW'||e.code==='KeyS')){wSel=(wSel+(e.code==='ArrowUp'||e.code==='KeyW'?WORLDS.length-1:1))%WORLDS.length;markWorld();return}
   if(e.code==='KeyZ'||e.code==='Enter'||e.code==='Space'){e.preventDefault();action()}
   if(e.code==='KeyX'||e.code==='Escape')back();
 });
