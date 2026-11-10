@@ -968,9 +968,9 @@ function postFX(){
 /* ---------- mundos ---------- */
 const WORLDS=[
   {id:'feria',n:'Isla Cascabel',tipo:'Feria',d:'Atracciones, payasos y la Gran Carpa.',open:true},
-  {id:'fantasia',n:'Valle Encantado',tipo:'Fantasía',d:'Setas gigantes, hadas y un castillo que flota sobre las nubes.'},
-  {id:'pantano',n:'Pantano Lúgubre',tipo:'Siniestro',d:'Niebla, juguetes rotos y marionetas que ya no tienen dueño.'},
-  {id:'infierno',n:'Ciudadela Infernal',tipo:'Malvado',d:'Calderas, ríos de lava y los jefes más crueles.'}
+  {id:'fantasia',n:'Valle Encantado',tipo:'Fantasía',d:'Setas gigantes, hadas y un castillo que flota sobre las nubes.',req:'Todavía tienes que desbloquear el viaje al Valle Encantado.'},
+  {id:'pantano',n:'Pantano Lúgubre',tipo:'Siniestro',d:'Niebla, juguetes rotos y marionetas que ya no tienen dueño.',req:'Todavía tienes que desbloquear el viaje al Pantano Lúgubre.'},
+  {id:'infierno',n:'Ciudadela Infernal',tipo:'Malvado',d:'Calderas, ríos de lava y los jefes más crueles.',req:'Todavía tienes que desbloquear el viaje a la Ciudadela Infernal.'}
 ];
 let wSel=0;
 function openWorlds(){
@@ -991,7 +991,7 @@ function openWorlds(){
 function markWorld(){[...document.querySelectorAll('.wbtn')].forEach((b,i)=>b.classList.toggle('sel',i===wSel))}
 function pickWorld(){
   const w=WORLDS[wSel];
-  $('wMsg').textContent=wSel===0?'Ya estás en la Isla Cascabel.':`Ruta cerrada: vence al jefe de ${WORLDS[wSel-1].n} para viajar a ${w.n}.`;
+  $('wMsg').textContent=wSel===0?'Ya estás en la Isla Cascabel.':(w.open?`Viaje a ${w.n} disponible.`:`Ruta cerrada. ${w.req||'Todavía no puedes viajar aquí.'}`);
 }
 function closeWorlds(){$('worlds').hidden=true;mode='map'}
 document.getElementById('bWClose').onclick=e=>{e.stopPropagation();closeWorlds()};

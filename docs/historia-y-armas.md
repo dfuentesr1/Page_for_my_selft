@@ -1,5 +1,10 @@
 # Isla Cascabel: historia y armas
 
+## Saga
+El juego **no tiene un final cerrado**. La idea es continuarlo en varias entregas, así que la
+historia de cada entrega termina abierta y deja ganchos para la siguiente: personajes que escapan,
+mundos que se mencionan pero no se visitan, misterios sin resolver.
+
 ## Personajes
 Los dos hermanos protagonistas (diseños de referencia aportados por el autor):
 - El bufón: gorro de cascabeles azul y mostaza, gorguera, chaleco de rombos y calzas a rayas.
@@ -47,7 +52,11 @@ En el mapa, las armas se venden en la Caseta de tiro (islote de la derecha).
 ## Mundos
 La idea es que haya varios mundos de estilos distintos y que se pueda viajar entre ellos.
 En el mapa, el **globo de viajes** (costa suroeste de la Isla Cascabel) abre el selector de mundos.
-Los mundos que aún no existen aparecen como cerrados. Cada ruta se abre al vencer al jefe del mundo anterior.
+Los mundos que aún no existen aparecen como cerrados.
+
+**Desbloqueo de viajes:** depende de la zona. En algunas habrá que desbloquear el viaje para poder ir
+a otro mundo, y la condición puede cambiar de una zona a otra (vencer a un jefe, conseguir un objeto,
+reparar el transporte...). En el mapa cada mundo tiene su propio texto de requisito.
 
 Los jefes son originales. La lista siguiente es una **propuesta** para que la revise el autor:
 
@@ -58,8 +67,10 @@ Los jefes son originales. La lista siguiente es una **propuesta** para que la re
 | 3 | Pantano Lúgubre | Siniestro | Niebla, juguetes rotos, marionetas abandonadas | Madame Marioneta (sus hilos mueven el escenario) · Míster Muelle (caja sorpresa gigante) · el Barquero sin Sombra |
 | 4 | Ciudadela Infernal | Malvado | Calderas, ríos de lava, fábricas | El Capataz de Hierro · el Gran Jefe, el último y más cruel |
 
-Posible enlace con la historia: el jefe final podría ser el dueño rácano del circo que los despidió al principio.
+Posible hilo de la saga: el dueño rácano del circo que los despidió reaparece de vez en cuando, pero
+nunca se resuelve del todo en una sola entrega, para mantener la historia abierta.
 
 ### Pendiente de definir
 - Número final de mundos y su orden.
-- Si el viaje es siempre en globo o cambia según el mundo (barco, tren fantasma, cañón...).
+- Transporte: depende de la zona. Falta decidir cuál usa cada mundo y qué hay que hacer para desbloquearlo.
+- Qué mundos entran en esta primera entrega y cuáles quedan para las siguientes.

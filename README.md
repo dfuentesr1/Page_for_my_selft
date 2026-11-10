@@ -55,6 +55,8 @@ mapa de Cuphead. Abre `mapa-feria/index.html` en el navegador; no necesita servi
 
 Viajes: el globo de la costa suroeste abre el selector de mundos (Isla Cascabel, Valle Encantado,
 Pantano Lúgubre y Ciudadela Infernal; los tres últimos aún cerrados).
+Cada mundo lleva su propio texto de requisito (`req` en `WORLDS`), porque la forma de desbloquear el
+viaje cambia según la zona.
 
 Extras: 4 monedas escondidas, martillo de fuerza, taquilla, poste indicador y caseta de tiro (vende las armas).
 
