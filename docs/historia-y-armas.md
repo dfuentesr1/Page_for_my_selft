@@ -8,18 +8,32 @@ Los dos hermanos protagonistas (diseños de referencia aportados por el autor):
 Los sprites definitivos se incorporarán más adelante. En el mapa hay un marcador provisional ("P1").
 
 ## Historia (contada en viñetas)
-1. A los hermanos los despiden.
-2. Empiezan a buscar trabajos de otro tipo para ganarse la vida, y en todos les va mal.
-   - Ejemplo: repartidores de pizza. Van los dos en una moto lanzando pizzas a los monstruos,
-     y los despiden por no entregar las pizzas a tiempo.
-3. Después de esos fracasos empieza la aventura propiamente dicha, en la Isla Cascabel.
+Los dos hermanos trabajan en un circo. El dueño es un rácano: no quiere gastar más dinero en
+ellos y los despide. Sin trabajo, prueban empleos de todo tipo para ganarse la vida y en todos les
+va fatal. El tono es de humor: cada trabajo termina en desastre y en otro despido.
 
-La introducción se presentará como una secuencia de viñetas de cómic antes de llegar al mapa.
+Antes de empezar la aventura hay una serie de **minijuegos**, uno por trabajo. Las viñetas de
+cómic cuentan la historia entre minijuego y minijuego.
 
-### Pendiente de definir
-- De dónde los despiden la primera vez.
-- Qué otros trabajos prueban, además del de repartidores de pizza.
-- Qué los lleva a la isla y cuál es su objetivo allí.
+### Estructura de la introducción
+1. **Viñetas:** los hermanos en el circo. El dueño rácano los despide para ahorrarse su sueldo.
+2. **Minijuego: pizzeros.** Van los dos en una moto repartiendo pizzas. De repente salen
+   monstruos y tienen que tirarles pizzas para abrirse paso. Llegan tarde y los despiden.
+3. **Viñetas:** el despido de la pizzería.
+4. **Más minijuegos de trabajos**, cada uno terminado en despido y contado con viñetas
+   (ver tabla).
+5. **Viñetas:** sin ningún trabajo, los hermanos salen a buscarse la vida.
+6. **Comienza la aventura:** el mapa de mundo (Isla Cascabel).
+
+### Trabajos (minijuegos)
+| Trabajo | Idea de juego | Por qué los despiden |
+|---|---|---|
+| Pizzeros | Moto con los dos hermanos: uno conduce y esquiva y el otro lanza pizzas a los monstruos. Hay un límite de tiempo. | No entregan las pizzas a tiempo. |
+| Pilotos de avión | *Propuesta:* pilotar un avión de pasajeros esquivando monstruos voladores y tormentas, con los pasajeros cada vez más asustados. | *Propuesta:* aterrizan en un lago (o en la carpa del circo). |
+| Camareros | *Propuesta:* llevar bandejas con pilas de platos a mesas de clientes monstruosos sin que se caigan. | *Propuesta:* acaban con la tarta en la cara del cliente más importante. |
+| Otros trabajos graciosos | Por definir. | Por definir. |
+
+Las filas marcadas como *propuesta* son ideas para revisar; lo fijo es el trabajo y el tono de humor.
 
 ## Armas
 | Arma | Descripción |
@@ -44,7 +58,7 @@ Los jefes son originales. La lista siguiente es una **propuesta** para que la re
 | 3 | Pantano Lúgubre | Siniestro | Niebla, juguetes rotos, marionetas abandonadas | Madame Marioneta (sus hilos mueven el escenario) · Míster Muelle (caja sorpresa gigante) · el Barquero sin Sombra |
 | 4 | Ciudadela Infernal | Malvado | Calderas, ríos de lava, fábricas | El Capataz de Hierro · el Gran Jefe, el último y más cruel |
 
-Posible enlace con la historia: el jefe final podría ser el mismo "jefe" que los despidió al principio.
+Posible enlace con la historia: el jefe final podría ser el dueño rácano del circo que los despidió al principio.
 
 ### Pendiente de definir
 - Número final de mundos y su orden.
