@@ -21,7 +21,27 @@ Sprite 64x64 generado con PixelLab a partir del concept art. Animaciones mirando
 
 `frames/` tiene los PNG sueltos, `rotations/` las 8 direcciones estáticas y `*_preview.gif` una vista previa.
 
-## Mapa de mundo: Isla Cascabel (`mapa-feria/`)
+## The Circus (`mapa-feria/index.html`)
+
+Juego jugable en el navegador, en un solo archivo y sin dependencias. Incluye la introducción
+con la historia y el primer mundo (Isla Cascabel).
+
+**Recorrido de la introducción**
+1. Pantalla de título (con opción de saltar la historia).
+2. Viñetas: la función del circo y el jefe llamando a los hermanos a su oficina.
+3. Escena jugable dentro de la carpa: pista central, gradas, camerinos, bastidores y la oficina
+   del jefe. Hay objetos con los que hablar. Al hablar con el jefe se pasa a las viñetas del despido.
+4. Viñetas: el despido, los hermanos en casa sin nada que comer y el anuncio de la pizzería.
+5. Contrato en pergamino que se firma con un garabato (ratón, dedo o tecla Z).
+6. Viñetas del primer reparto y la aparición de los monstruos.
+7. Minijuego de pizzas en moto: cambiar de carril y lanzar pizzas a los monstruos.
+8. Viñetas: despido de la pizzería, pilotos de avión, camareros y salida a buscarse la vida.
+9. Llegada al mapa de la Isla Cascabel.
+
+Los hermanos usan recortes de las ilustraciones de referencia (`assets/hermanos/`). El jefe del
+circo (Don Céntimo) y el pizzero (Don Bocazas) son diseños y nombres provisionales.
+
+### Mapa de mundo: Isla Cascabel
 
 Mapa de mundo jugable con temática de feria y payasos, inspirado en cómo funciona el
 mapa de Cuphead. Abre `mapa-feria/index.html` en el navegador; no necesita servidor ni dependencias.
@@ -64,5 +84,4 @@ Historia, armas y mundos del juego: [`docs/historia-y-armas.md`](docs/historia-y
 Controles: flechas/WASD para moverse; Z, Intro o Espacio para interactuar; X o Esc para volver;
 joystick táctil en móvil.
 
-El jugador es un **marcador provisional** (`drawPlayerToken`); se sustituirá por el sprite
-definitivo del personaje.
+En el mapa los hermanos caminan juntos: el bufón va delante y el punk le sigue.

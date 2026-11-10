@@ -1,4 +1,4 @@
-# Isla Cascabel: historia y armas
+# The Circus: historia, armas y mundos
 
 ## Saga
 El juego **no tiene un final cerrado**. La idea es continuarlo en varias entregas, así que la
@@ -20,8 +20,11 @@ va fatal. El tono es de humor: cada trabajo termina en desastre y en otro despid
 Antes de empezar la aventura hay una serie de **minijuegos**, uno por trabajo. Las viñetas de
 cómic cuentan la historia entre minijuego y minijuego.
 
-### Estructura de la introducción
-1. **Viñetas:** los hermanos en el circo. El dueño rácano los despide para ahorrarse su sueldo.
+### Estructura de la introducción (ya jugable)
+1. **Viñetas:** la función del circo. Al acabar, el jefe los llama a su oficina.
+   **Escena jugable:** los hermanos recorren la carpa (pista, gradas, camerinos, bastidores) hasta la
+   oficina. Al hablar con el jefe, viñetas del despido y de los hermanos en casa sin comida.
+   Después, el anuncio de la pizzería y un contrato en pergamino que se firma con un garabato.
 2. **Minijuego: pizzeros.** Van los dos en una moto repartiendo pizzas. De repente salen
    monstruos y tienen que tirarles pizzas para abrirse paso. Llegan tarde y los despiden.
 3. **Viñetas:** el despido de la pizzería.
@@ -39,6 +42,11 @@ cómic cuentan la historia entre minijuego y minijuego.
 | Otros trabajos graciosos | Por definir. | Por definir. |
 
 Las filas marcadas como *propuesta* son ideas para revisar; lo fijo es el trabajo y el tono de humor.
+
+### Nombres provisionales
+- Don Céntimo: el dueño rácano del circo.
+- Pizzería Bocazas y su dueño, Don Bocazas.
+- Aerolíneas Pato Loco y el restaurante Le Monstre Gourmet.
 
 ## Armas
 | Arma | Descripción |
