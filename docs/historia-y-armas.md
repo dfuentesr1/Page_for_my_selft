@@ -44,7 +44,9 @@ cómic cuentan la historia entre minijuego y minijuego.
 Las filas marcadas como *propuesta* son ideas para revisar; lo fijo es el trabajo y el tono de humor.
 
 ### Nombres provisionales
-- Don Céntimo: el dueño rácano del circo.
+- Don Céntimo: el dueño rácano del circo. Mala persona, tramposo y creído: siempre intenta engañar a
+  todo el mundo y se cree el más listo. Corpulento y ancho de huesos, muy desaliñado, con camiseta de
+  tirantes manchada, cadena de oro, barba de varios días, diente de oro y palillo en la boca.
 - Pizzería Bocazas y su dueño, Don Bocazas.
 - Aerolíneas Pato Loco y el restaurante Le Monstre Gourmet.
 

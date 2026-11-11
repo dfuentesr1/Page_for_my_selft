@@ -1122,34 +1122,66 @@ function pushBrothers(list,p,b,H){
 }
 
 /* ---------- personajes secundarios provisionales ---------- */
-/* Don Céntimo, el dueño rácano del circo */
+/* Don Céntimo, el dueño rácano del circo: corpulento, desaliñado y tramposo */
 function drawBoss(g,o={}){
-  shadowB(g,0,0,48,12);
-  fig(g,[[-24,0],[-20,-30],[-6,-30],[-8,0]],{fill:'#3a2f3f',lw:2.6});fig(g,[[8,0],[6,-30],[20,-30],[24,0]],{fill:'#3a2f3f',lw:2.6});
-  oval(g,-18,-2,14,7,C.ink,{lw:2});oval(g,18,-2,14,7,C.ink,{lw:2});
-  fig(g,[[-34,-30],[-46,-66],[-36,-104],[0,-116],[36,-104],[46,-66],[34,-30],[0,-22]],{fill:C.wine,lw:3.2});
-  fig(g,[[-16,-108],[16,-108],[11,-40],[0,-34],[-11,-40]],{fill:C.cream,lw:2.6});
-  fig(g,[[-12,-96],[12,-96],[9,-48],[-9,-48]],{fill:C.gold,lw:2.2});
-  [-86,-72,-58].forEach(y=>oval(g,0,y,3,3,C.wine,{lw:1.2,shade:false}));
-  fig(g,[[-12,-112],[0,-106],[12,-112],[12,-100],[0,-104],[-12,-100]],{fill:C.red,lw:2.2,smooth:false});
-  // brazos
-  if(o.point){fig(g,[[34,-96],[78,-104],[80,-92],[36,-84]],{fill:C.wine,lw:2.6});oval(g,86,-98,9,8,C.cream,{lw:2.4});fig(g,[[92,-102],[108,-104],[108,-98],[93,-96]],{fill:C.cream,lw:2})}
-  else {fig(g,[[34,-96],[46,-70],[36,-60],[28,-80]],{fill:C.wine,lw:2.6});oval(g,40,-58,9,8,C.cream,{lw:2.4})}
-  fig(g,[[-34,-96],[-50,-118],[-40,-124],[-28,-104]],{fill:C.wine,lw:2.6});oval(g,-46,-126,9,8,C.cream,{lw:2.4});
-  oval(g,-46,-140,9,9,C.goldL,{lw:2.4});label(g,'¢',-46,-139,11,C.wine);
-  // cabeza
-  oval(g,0,-134,24,22,'#f0cfa8',{lw:3});
-  blot(g,-14,-128,5,3,'rgba(220,120,110,.5)');blot(g,14,-128,5,3,'rgba(220,120,110,.5)');
-  const brow=o.mad?3:0;
-  fig(g,[[-14,-146+brow],[-4,-142]],{closed:false,lw:2.6});fig(g,[[14,-146+brow],[4,-142]],{closed:false,lw:2.6});
-  oval(g,-8,-137,2.6,3.6,C.ink,{lw:0,shade:false});oval(g,8,-137,2.6,3.6,C.ink,{lw:0,shade:false});
-  oval(g,8,-137,7,7,'rgba(220,240,240,.25)',{lw:2,shade:false});fig(g,[[15,-135],[22,-118]],{closed:false,lw:1.4,stroke:C.gold});
-  oval(g,0,-128,7,6,'#e7a98c',{lw:2.4});
-  fig(g,[[-2,-121],[-14,-123],[-24,-117],[-26,-124],[-20,-129],[-6,-126]],{fill:'#4a2e20',lw:2});
-  fig(g,[[2,-121],[14,-123],[24,-117],[26,-124],[20,-129],[6,-126]],{fill:'#4a2e20',lw:2});
-  // chistera
-  oval(g,0,-153,32,7,C.ink,{lw:2.4});
-  fig(g,[[-19,-154],[-17,-196],[17,-196],[19,-154]],{fill:'#2b2433',lw:2.8},()=>{g.fillStyle=C.gold;g.fillRect(-22,-166,44,8)});
+  const tt=t,SK='#e6b48c',SKD='174,110,80';
+  const limb=(pts,w,col)=>{g.lineCap='round';g.lineJoin='round';traceSmooth(g,pts,false);g.lineWidth=w+7;g.strokeStyle=C.ink;g.stroke();traceSmooth(g,pts,false);g.lineWidth=w;g.strokeStyle=col;g.stroke();
+    g.strokeStyle='rgba(60,35,25,.55)';g.lineWidth=1.4;for(let i=0;i<pts.length-1;i++){const [x1,y1]=pts[i],[x2,y2]=pts[i+1];for(let k=.2;k<1;k+=.3){const x=x1+(x2-x1)*k,y=y1+(y2-y1)*k;g.beginPath();g.moveTo(x-3,y-2);g.lineTo(x+2,y-6);g.stroke()}}};
+  const hand=(x,y,r,rot=0)=>{g.save();g.translate(x,y);g.rotate(rot);oval(g,0,0,r,r*.85,SK,{lw:3});[-.35,0,.35].forEach(a=>{g.strokeStyle='rgba(42,29,23,.6)';g.lineWidth=1.6;g.beginPath();g.moveTo(Math.cos(a)*r*.4,Math.sin(a)*r*.4);g.lineTo(Math.cos(a)*r*.95,Math.sin(a)*r*.95);g.stroke()});oval(g,r*.5,-r*.3,4,3,C.goldL,{lw:1.6,amt:.2,shade:false});g.restore()};
+  shadowB(g,0,0,70,15);
+  // piernas cortas con pantalón ancho y chanclas
+  fig(g,[[-50,-6],[-56,-48],[-6,-54],[-10,-6]],{fill:'#6b5a48',lw:3});fig(g,[[10,-6],[6,-54],[56,-48],[50,-6]],{fill:'#6b5a48',lw:3});
+  blot(g,-30,-26,8,5,'rgba(60,40,25,.35)');
+  [[-32,-4],[32,-4]].forEach(([x,y])=>{oval(g,x,y,24,7,'#3f6f8a',{lw:2.6});for(let i=0;i<4;i++)oval(g,x-12+i*8+(x>0?4:-4),y-4,3.4,3,SK,{lw:1.4,amt:.2,shade:false})});
+  // brazo de fondo
+  const point=!!o.point;
+  if(point)limb([[-66,-150],[-96,-112],[-66,-82]],20,SK);
+  else limb([[-66,-150],[-92,-112],[-22,-92]],20,SK);
+  // torso ancho: piel, barriga y camiseta de tirantes
+  const torso=[[-58,-44],[-74,-70],[-82,-104],[-77,-136],[-66,-160],[-34,-172],[34,-172],[66,-160],[77,-136],[82,-104],[74,-70],[58,-44],[0,-36]];
+  fig(g,torso,{fill:SK,lw:3.6});
+  const tank=[[-60,-58],[-72,-80],[-76,-108],[-67,-140],[-50,-152],[-42,-171],[-31,-171],[-24,-150],[0,-136],[24,-150],[31,-171],[42,-171],[50,-152],[67,-140],[76,-108],[72,-80],[60,-58],[0,-50]];
+  fig(g,tank,{fill:'#ece5d0',lw:3},()=>{
+    softBlob(g,-50,-128,16,20,'190,160,90',.6);softBlob(g,50,-128,16,20,'190,160,90',.6);
+    blot(g,-18,-92,11,8,'rgba(214,170,70,.85)');blot(g,-10,-84,4,3,'rgba(214,170,70,.85)');blot(g,26,-72,7,5,'rgba(150,60,40,.55)');
+    oval(g,30,-108,7,5,SK,{lw:1.8,amt:.3,shade:false});g.strokeStyle='rgba(60,35,25,.6)';g.lineWidth=1.2;for(let i=0;i<4;i++){g.beginPath();g.moveTo(26+i*2.5,-109);g.lineTo(28+i*2.5,-104);g.stroke()}
+  });
+  oval(g,-4,-48,3,2,'rgba(60,35,25,.7)',{lw:1.2,amt:.2,shade:false});
+  g.strokeStyle='rgba(60,35,25,.7)';g.lineWidth=1.5;for(let i=0;i<7;i++){const x=-14+i*4.5;g.beginPath();g.moveTo(x,-140);g.quadraticCurveTo(x+3,-146,x+1,-150);g.stroke()}
+  // cinturón bajo la barriga
+  fig(g,[[-58,-50],[58,-50],[56,-40],[-56,-40]],{fill:'#3a2a20',lw:2.6});fig(g,rectP(-10,-52,10,-38),{fill:C.goldL,lw:2.2});
+  // cadena de oro gorda con medallón
+  for(let i=0;i<=12;i++){const a=Math.PI*(.12+i*.76/12),x=Math.cos(a)*26,y=-166+Math.sin(a)*46;oval(g,x,y,i%2?4.5:3,i%2?3:4.5,C.goldL,{lw:1.8,amt:.2})}
+  oval(g,0,-114,14,14,C.goldL,{lw:2.6});g.save();g.translate(0,-113);if(g.getTransform().a<0)g.scale(-1,1);label(g,'¢',0,0,16,C.wine);g.restore();blot(g,-5,-119,3,2,'rgba(255,255,255,.7)');
+  // brazo delantero
+  if(point){limb([[66,-150],[100,-150],[130,-156]],20,SK);hand(136,-157,13);fig(g,[[142,-162],[166,-166],[166,-158],[143,-154]],{fill:SK,lw:2.4});hand(-62,-80,12,.5)}
+  else {limb([[66,-150],[92,-112],[22,-94]],20,SK);hand(-14,-92,13,-.3);hand(14,-96,13,.3)}
+  fig(g,[[78,-138],[90,-130],[84,-120],[74,-128]],{fill:'rgba(70,90,140,.55)',lw:0,shade:false});
+  // cuello gordo
+  fig(g,[[-24,-170],[-22,-184],[22,-184],[24,-170]],{fill:SK,lw:3});
+  // cabeza ancha con papada
+  const head=[[-32,-176],[-37,-198],[-31,-222],[-15,-234],[15,-234],[31,-222],[37,-198],[32,-176],[16,-166],[-16,-166]];
+  oval(g,-37,-200,6,9,SK,{lw:2.6});oval(g,37,-200,6,9,SK,{lw:2.6});
+  fig(g,head,{fill:SK,lw:3.4},()=>{const sr=mulberry(5);for(let i=0;i<80;i++){const a=sr()*Math.PI,r=18+sr()*16;blot(g,Math.cos(a)*r*1.05,-186+Math.sin(a)*r*.55-sr()*4,.9,.9,'rgba(60,40,30,.5)')}softBlob(g,0,-170,34,12,SKD,.5)});
+  fig(g,[[-16,-170],[0,-166],[16,-170]],{closed:false,lw:2,stroke:'rgba(42,29,23,.6)',amt:.3});
+  // pelo: patillas y cuatro pelos peinados por encima de la calva
+  fig(g,[[-35,-214],[-30,-224],[-26,-210],[-30,-196]],{fill:'#4a3a30',lw:2});fig(g,[[35,-214],[30,-224],[26,-210],[30,-196]],{fill:'#4a3a30',lw:2});
+  [0,1,2].forEach(i=>fig(g,[[-28,-222+i*3],[-6,-238+i*2],[18,-236+i*2],[28,-226+i*3]],{closed:false,lw:1.8,stroke:'#4a3a30',amt:.4}));
+  softBlob(g,-10,-226,10,5,'255,250,235',.6);
+  // ojos entornados de tramposo, mirando de reojo
+  const mad=!!o.mad;
+  [[-13,-204],[13,-204]].forEach(([x,y],i)=>{oval(g,x,y,8,5.5,'#fbf4e2',{lw:2,amt:.3,shade:false});blot(g,x+3.5,y+1,2.6,3,C.ink);
+    fig(g,[[x-9,y-1],[x-6,y-6],[x+6,y-6],[x+9,y-1],[x,y-2]],{fill:SK,lw:2,amt:.3,shade:false})});
+  if(mad){fig(g,[[-24,-216],[-6,-210]],{closed:false,lw:3.4,amt:.3});fig(g,[[24,-216],[6,-210]],{closed:false,lw:3.4,amt:.3})}
+  else {fig(g,[[-23,-211],[-6,-209]],{closed:false,lw:3.4,amt:.3});fig(g,[[6,-216],[16,-220],[24,-216]],{closed:false,lw:3.4,amt:.3})}
+  // nariz de bebedor
+  oval(g,2,-193,10,8,'#d8877a',{lw:2.6});blot(g,-1,-196,3,2,'rgba(255,255,255,.55)');blot(g,6,-191,1.3,1.3,'rgba(150,40,40,.6)');
+  // sonrisa torcida con diente de oro y palillo
+  fig(g,[[-16,-181],[-4,-178],[10,-180],[20,-187],[14,-176],[0,-172],[-12,-176]],{fill:'#5a1b1b',lw:2.6,amt:.3},()=>{g.fillStyle='#f4ecd6';g.fillRect(-12,-182,26,4);g.fillStyle=C.goldL;g.fillRect(4,-182,5,5)});
+  fig(g,[[18,-183],[36,-192]],{closed:false,lw:3,stroke:'#d9c28a',amt:0});
+  // gota de sudor y mosca
+  fig(g,[[26,-224],[29,-216],[26,-212],[23,-216]],{fill:'#a9d3e0',lw:1.6,amt:.2});
+  if(o.fly!==false){const fx=Math.cos(tt*6)*48,fy=-244+Math.sin(tt*9)*10;blot(g,fx,fy,3,2.4,C.ink);blot(g,fx-2,fy-3,3,1.6,'rgba(255,255,255,.7)');blot(g,fx+2,fy-3,3,1.6,'rgba(255,255,255,.7)')}
 }
 /* Don Bocazas, el pizzero */
 function drawChef(g,o={}){
@@ -1277,27 +1309,27 @@ P.show={cap:'The Circus. La función de cada noche.',bubbles:[{x:110,y:250,text:
   drawImg(g,'punk_guitarra',545,408,250);
   for(let i=0;i<11;i++){const x=-20+i*80+(i%2)*20,y=470-(i%3)*8;oval(g,x,y,34,40,'#1b120f',{lw:0,amt:1,shade:false});if(i%3===1){fig(g,[[x+10,y-30],[x+22,y-80+Math.sin(lt*8+i)*8],[x+30,y-76],[x+20,y-28]],{fill:'#1b120f',lw:0,shade:false})}}
 }};
-P.call={cap:'Al acabar la función...',bubbles:[{x:560,y:80,text:'¡Vosotros dos! A mi oficina. ¡YA!',shout:true,tail:[620,200],w:230}],draw(g,lt){
+P.call={cap:'Al acabar la función...',bubbles:[{x:540,y:70,text:'¡Vosotros dos! A mi oficina. ¡YA!',shout:true,tail:[600,140],w:230}],draw(g,lt){
   bgFill(g,'#6b4a33');g.strokeStyle='rgba(42,29,23,.35)';g.lineWidth=3;for(let x=-900;x<1700;x+=46){g.beginPath();g.moveTo(x,-600);g.lineTo(x,1050);g.stroke()}
   fig(g,rectP(-100,400,900,520),{fill:'#4a3324',lw:3});
-  g.save();g.translate(640,445);g.scale(1.65,1.65);drawBoss(g,{point:true,mad:true});g.restore();
+  g.save();g.translate(600,445);g.scale(-1.45,1.45);drawBoss(g,{point:true,mad:true});g.restore();
   fig(g,[[690,-60],[900,-60],[900,460],[700,460],[720,300],[690,120]],{fill:C.red,lw:4},()=>{for(let x=700;x<900;x+=34){g.fillStyle='rgba(60,15,15,.35)';g.fillRect(x,-60,14,520)}});
   fig(g,[[430,-60],[520,-60],[480,140],[500,460],[430,460]],{fill:C.red,lw:4},()=>{for(let x=430;x<520;x+=30){g.fillStyle='rgba(60,15,15,.35)';g.fillRect(x,-60,12,520)}});
   drawImg(g,'bufon_der',170,445,260);drawImg(g,'punk_quieto',310,447,255);
   sweat(g,215,150,lt);sweat(g,350,150,lt+.3);
 }};
-P.firedA={bubbles:[{x:600,y:60,text:'Estáis despedidos. Cobráis demasiado.',tail:[600,180],w:240},{x:200,y:150,text:'¡Pero si cobramos en cacahuetes!',tail:[220,250],w:200}],draw(g,lt){
+P.firedA={bubbles:[{x:560,y:55,text:'Estáis despedidos. Cobráis demasiado.',tail:[590,110],w:240},{x:200,y:150,text:'¡Pero si cobramos en cacahuetes!',tail:[220,250],w:200}],draw(g,lt){
   bgFill(g,'#5d7a62');wallStripes(g,'#5d7a62','#557259',26);
   fig(g,rectP(660,70,770,190),{fill:C.gold,lw:3.5},()=>{fig(g,rectP(672,82,758,178),{fill:'#3a2f3f',lw:2});oval(g,715,130,30,30,C.goldL,{lw:2.6});label(g,'¢',715,131,30,C.wine)});
-  g.save();g.translate(600,355);g.scale(1.55,1.55);drawBoss(g,{mad:false});g.restore();
+  g.save();g.translate(600,375);g.scale(1.3,1.3);drawBoss(g,{mad:false});g.restore();
   fig(g,rectP(390,300,830,470),{fill:C.wood,lw:4},()=>{g.fillStyle='rgba(42,29,23,.25)';g.fillRect(390,330,440,8);fig(g,rectP(560,360,660,420),{fill:C.woodD,lw:2.6});oval(g,610,390,6,6,C.gold,{lw:1.8})});
   for(let i=0;i<4;i++)for(let j=0;j<=i%3+1;j++)oval(g,440+i*26,300-j*7,12,4,C.goldL,{lw:1.6,amt:.3});
   drawImg(g,'bufon_espalda',200,480,300);drawImg(g,'punk_quieto',340,478,290);
 }};
-P.firedB={bubbles:[{x:560,y:70,text:'Pues eso: demasiados cacahuetes.',tail:[640,170],w:200}],draw(g,lt){
+P.firedB={bubbles:[{x:540,y:70,text:'Pues eso: demasiados cacahuetes.',tail:[620,150],w:200}],draw(g,lt){
   bgFill(g,'#5d7a62');wallStripes(g,'#5d7a62','#557259',26);
   fig(g,rectP(60,60,250,470),{fill:'#2b1d17',lw:4});fig(g,[[250,60],[330,90],[330,470],[250,470]],{fill:C.woodD,lw:4});
-  g.save();g.translate(650,450);g.scale(1.45,1.45);drawBoss(g,{point:true,mad:true});g.restore();
+  g.save();g.translate(640,450);g.scale(-1.3,1.3);drawBoss(g,{point:true,mad:true});g.restore();
   g.save();g.translate(130+Math.sin(lt*3)*4,300);g.rotate(-.5);drawImg(g,'bufon_der',0,0,170,true);g.restore();
   g.save();g.translate(230,250);g.rotate(.4);drawImg(g,'punk_agachado',0,0,150,true);g.restore();
   speedLines(g,280,520,[180,230,290,340],lt);
@@ -1566,7 +1598,7 @@ function buildCircus(){
   so(1520,700,SPR.crates,{rx:62,ry:14},null);
   so(1250,800,SPR.desk,{dy:-30,rx:112,ry:34},null);
   so(1350,740,SPR.safe,{rx:40,ry:12},null);
-  lo(1250,750,g2=>{g2.save();g2.scale(.9,.9);drawBoss(g2,{mad:false});g2.restore()},null);
+  lo(1250,750,g2=>{g2.save();g2.scale(.82,.82);drawBoss(g2,{mad:false});g2.restore()},null);
   cirInter.push({x:850,y:420,r:80,h:20,who:'Salida',lines:['La salida. Primero hay que pasar por la oficina del jefe.']});
   cirInter.push({x:1250,y:840,r:80,h:290,who:'Don Céntimo',boss:true});
 }
