@@ -58,8 +58,11 @@ Las filas marcadas como *propuesta* son ideas para revisar; lo fijo es el trabaj
 | Sifones de ácido | Sifones cargados con ácido. |
 
 ## Tienda: Caseta de tiro
-La atiende el comerciante (diseño del autor en `assets/comerciante/`), que aparece en el menú de la tienda
-como el tendero de Cuphead: respira, cambia de pose al elegir un producto y habla en un bocadillo.
+Al entrar se pasa a una escena de tienda a pantalla completa, dentro del carromato del comerciante (diseño
+del autor en `assets/comerciante/`): el comerciante detrás del mostrador, los productos colocados encima
+(el elegido se levanta y brilla) y una pizarra en el frente del mostrador con nombre, tipo, descripción,
+precio y «Próximamente». El comerciante respira, presenta cada producto y se niega con un gesto al
+intentar comprar.
 
 Está en el islote de la derecha de la Isla Cascabel. Se puede entrar siempre, aunque no tengas monedas:
 las monedas solo hacen falta para comprar.

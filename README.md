@@ -79,7 +79,7 @@ Pantano Lúgubre y Ciudadela Infernal; los tres últimos aún cerrados).
 Cada mundo lleva su propio texto de requisito (`req` en `WORLDS`), porque la forma de desbloquear el
 viaje cambia según la zona.
 
-Extras: 4 monedas escondidas, martillo de fuerza, taquilla, poste indicador y caseta de tiro: abre la tienda, con 3 armas y 3 objetos marcados como «Próximamente».
+Extras: 4 monedas escondidas, martillo de fuerza, taquilla, poste indicador y caseta de tiro: entra en la escena de la tienda, con el comerciante tras el mostrador y 3 armas y 3 objetos marcados como «Próximamente».
 
 Historia, armas y mundos del juego: [`docs/historia-y-armas.md`](docs/historia-y-armas.md).
 Controles: flechas/WASD para moverse; Z, Intro o Espacio para interactuar; X o Esc para volver;
