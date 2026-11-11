@@ -1,0 +1,77 @@
+{
+ "jefe_escribe": {
+  "frames": 8,
+  "fps": 8,
+  "size": [
+   224,
+   212
+  ],
+  "pivot": [
+   0.491,
+   0.042
+  ],
+  "clip": "Boss_Writing",
+  "pivot_nota": "pivot normalizado (x desde la izquierda, y desde abajo), como el Custom Pivot de Unity",
+  "loop": true
+ },
+ "jefe_cara": {
+  "frames": 6,
+  "fps": 4,
+  "size": [
+   185,
+   157
+  ],
+  "pivot": [
+   0.622,
+   0.057
+  ],
+  "clip": "Boss_Expressions (solo cabeza, sin silla)",
+  "pivot_nota": "pivot normalizado (x desde la izquierda, y desde abajo), como el Custom Pivot de Unity",
+  "loop": false
+ },
+ "elefante": {
+  "frames": 7,
+  "fps": 6,
+  "size": [
+   169,
+   203
+  ],
+  "pivot": [
+   0.438,
+   0.044
+  ],
+  "clip": "Elephant_Balance",
+  "pivot_nota": "pivot normalizado (x desde la izquierda, y desde abajo), como el Custom Pivot de Unity",
+  "loop": true
+ },
+ "mono": {
+  "frames": 7,
+  "fps": 10,
+  "size": [
+   135,
+   147
+  ],
+  "pivot": [
+   0.541,
+   0.061
+  ],
+  "clip": "Monkey_Drumming",
+  "pivot_nota": "pivot normalizado (x desde la izquierda, y desde abajo), como el Custom Pivot de Unity",
+  "loop": true
+ },
+ "tigre": {
+  "frames": 6,
+  "fps": 6,
+  "size": [
+   184,
+   190
+  ],
+  "pivot": [
+   0.5,
+   0.047
+  ],
+  "clip": "Tiger_Idle",
+  "pivot_nota": "pivot normalizado (x desde la izquierda, y desde abajo), como el Custom Pivot de Unity",
+  "loop": true
+ }
+}
