@@ -1544,7 +1544,7 @@ SC.circus={
       const a=Math.round(Math.atan2(iy,ix)/(Math.PI/4))*(Math.PI/4);cp.fx=Math.cos(a);cp.fy=Math.sin(a);cp.moving=true;cp.phase+=dt*11;cp.vx=ix*SP;cp.vy=iy*SP;
     } else {cp.moving=false;cp.vx*=.8;cp.vy*=.8}
     updateBuddy(cp,buddy,dt);
-    CS=Math.max(cw/CIR.W,ch/CIR.H)*1.25;
+    CS=Math.max(cw/CIR.W,ch/CIR.H)*1.02;
     const vw=cw/CS,vh=ch/CS;let tx=cp.x+cp.vx*.25,ty=cp.y-90+cp.vy*.2;
     tx=clamp(tx,vw/2,CIR.W-vw/2);ty=clamp(ty,vh/2,CIR.H-vh/2);
     const k=1-Math.exp(-dt*4.2);ccam.x+=(tx-ccam.x)*k;ccam.y+=(ty-ccam.y)*k;
