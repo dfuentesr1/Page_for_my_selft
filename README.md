@@ -38,9 +38,9 @@ con la historia y el primer mundo (Isla Cascabel).
 8. Viñetas: despido de la pizzería, pilotos de avión, camareros y salida a buscarse la vida.
 9. Llegada al mapa de la Isla Cascabel.
 
-Los hermanos, el jefe del circo y el comerciante de la tienda usan recortes de las ilustraciones de
-referencia (`assets/hermanos/`, `assets/jefe/`, `assets/comerciante/`). El pizzero (Don Bocazas) y los
-nombres de los personajes secundarios son provisionales.
+Los hermanos, el jefe del circo, el comerciante y el pizzero usan recortes de las ilustraciones de
+referencia (`assets/hermanos/`, `assets/jefe/`, `assets/comerciante/`, `assets/pizzero/`). Los nombres
+de los personajes secundarios son provisionales.
 
 ### Mapa de mundo: Isla Cascabel
 

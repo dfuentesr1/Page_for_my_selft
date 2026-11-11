@@ -47,7 +47,7 @@ Las filas marcadas como *propuesta* son ideas para revisar; lo fijo es el trabaj
 - Don Céntimo: el dueño rácano del circo (diseño del autor en `assets/jefe/`; el nombre es provisional). Mala persona, tramposo y creído: siempre intenta engañar a
   todo el mundo y se cree el más listo. Corpulento y ancho de huesos, muy desaliñado, con camiseta de
   tirantes manchada, cadena de oro, barba de varios días, diente de oro y palillo en la boca.
-- Pizzería Bocazas y su dueño, Don Bocazas.
+- Pizzería Bocazas y su dueño, Don Bocazas (diseño del autor en `assets/pizzero/`; el nombre es provisional).
 - Aerolíneas Pato Loco y el restaurante Le Monstre Gourmet.
 
 ## Armas
