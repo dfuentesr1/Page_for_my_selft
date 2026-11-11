@@ -29,8 +29,9 @@ con la historia y el primer mundo (Isla Cascabel).
 **Recorrido de la introducción**
 1. Pantalla de título (con opción de saltar la historia).
 2. Viñetas: la función del circo y el jefe llamando a los hermanos a su oficina.
-3. Escena jugable dentro de la carpa: pista central, gradas, camerinos, bastidores y la oficina
-   del jefe. Hay objetos con los que hablar. Al hablar con el jefe se pasa a las viñetas del despido.
+3. Escena jugable dentro de la carpa, sobre la ilustración del autor (`assets/carpa/`): pista central,
+   zona de entrenamiento, jaula del tigre y la oficina del jefe. Las luces parpadean, los focos barren la
+   pista, el aro arde y los artistas hacen cosas. Se puede hablar con ellos. Al hablar con el jefe se pasa a las viñetas del despido.
 4. Viñetas: el despido, los hermanos en casa sin nada que comer y el anuncio de la pizzería.
 5. Contrato en pergamino que se firma con un garabato (ratón, dedo o tecla Z).
 6. Viñetas del primer reparto y la aparición de los monstruos.

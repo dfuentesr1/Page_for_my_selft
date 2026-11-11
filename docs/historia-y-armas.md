@@ -22,8 +22,9 @@ cómic cuentan la historia entre minijuego y minijuego.
 
 ### Estructura de la introducción (ya jugable)
 1. **Viñetas:** la función del circo. Al acabar, el jefe los llama a su oficina.
-   **Escena jugable:** los hermanos recorren la carpa (pista, gradas, camerinos, bastidores) hasta la
-   oficina. Al hablar con el jefe, viñetas del despido y de los hermanos en casa sin comida.
+   **Escena jugable:** los hermanos recorren la carpa (ilustración del autor) hasta la oficina del jefe.
+   Personajes con los que hablar: mono tamborilero, elefanta Trompeta, payaso del monociclo, la
+   trapecista, el forzudo Bruno y el tigre Rayas (nombres provisionales). Al hablar con el jefe, viñetas del despido y de los hermanos en casa sin comida.
    Después, el anuncio de la pizzería y un contrato en pergamino que se firma con un garabato.
 2. **Minijuego: pizzeros.** Van los dos en una moto repartiendo pizzas. De repente salen
    monstruos y tienen que tirarles pizzas para abrirse paso. Llegan tarde y los despiden.
