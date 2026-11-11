@@ -57,7 +57,20 @@ Las filas marcadas como *propuesta* son ideas para revisar; lo fijo es el trabaj
 | Tartas granada | Tartas con granadas dentro. |
 | Sifones de ácido | Sifones cargados con ácido. |
 
-En el mapa, las armas se venden en la Caseta de tiro (islote de la derecha).
+## Tienda: Caseta de tiro
+Está en el islote de la derecha de la Isla Cascabel. Se puede entrar siempre, aunque no tengas monedas:
+las monedas solo hacen falta para comprar.
+
+| Producto | Tipo | Precio | Estado |
+|---|---|---|---|
+| Bolas de malabares explosivas | Arma | 4 | Próximamente |
+| Tarta granada | Arma | 4 | Próximamente |
+| Sifón de ácido | Arma | 4 | Próximamente |
+| Nariz de repuesto (+1 vida) | Objeto | 3 | Próximamente |
+| Zapatos de muelle (saltos más altos) | Objeto | 3 | Próximamente |
+| Bocina de payaso (aturde a enemigos cercanos) | Objeto | 3 | Próximamente |
+
+Los tres objetos y los precios son una propuesta para rellenar la estantería; se pueden cambiar o quitar.
 
 ## Mundos
 La idea es que haya varios mundos de estilos distintos y que se pueda viajar entre ellos.

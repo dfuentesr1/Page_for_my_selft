@@ -66,6 +66,34 @@ html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(-
 @keyframes zonePop{0%{opacity:0;transform:translateX(-50%) scale(.7)}12%{opacity:1;transform:translateX(-50%) scale(1.05)}20%{transform:translateX(-50%) scale(1)}80%{opacity:1}100%{opacity:0}}
 #signUI{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);transform:translateX(-50%);display:flex;gap:12px}
 .btn:disabled{opacity:.5;cursor:not-allowed}
+.shopbox{position:relative;width:min(880px,100%);max-height:calc(100% - 32px);overflow:auto;color:var(--ink);border:4px solid var(--ink);border-radius:14px;box-shadow:8px 8px 0 rgba(0,0,0,.55);background:#7a5233 repeating-linear-gradient(90deg,rgba(42,29,23,.28) 0 3px,transparent 3px 72px);padding:0 18px 16px;animation:cardIn .45s cubic-bezier(.2,1.6,.4,1) both}
+.awning{height:44px;margin:0 -18px 6px;border-bottom:4px solid var(--ink);background:repeating-linear-gradient(90deg,var(--red) 0 44px,var(--paper) 44px 88px);position:relative}
+.awning::after{content:"";position:absolute;left:0;right:0;bottom:-18px;height:16px;background:radial-gradient(circle at 22px 0,var(--red) 15px,var(--ink) 16px 18px,transparent 19px) 0 0/88px 18px repeat-x,radial-gradient(circle at 66px 0,var(--paper) 15px,var(--ink) 16px 18px,transparent 19px) 0 0/88px 18px repeat-x}
+.shophead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 6px}
+.shophead h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(26px,5vw,38px);color:var(--goldL,#e2bd62);color:#f3d27a;-webkit-text-stroke:1.5px var(--ink);text-shadow:3px 3px 0 var(--ink)}
+.purse{background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:5px 12px;font-family:var(--display);font-size:15px}
+.purse b{color:var(--wine);font-variant-numeric:tabular-nums}
+.shelf{margin-top:10px}
+.shelfname{font-family:var(--display);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);text-shadow:2px 2px 0 var(--ink);margin-bottom:6px}
+.items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding-bottom:12px;border-bottom:10px solid #5a3a22;box-shadow:0 4px 0 var(--ink)}
+.sitem{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--paper);border:3px solid var(--ink);border-radius:12px 9px 13px 10px;padding:6px 6px 0;cursor:pointer;font-family:var(--body);color:var(--ink);overflow:hidden;box-shadow:3px 3px 0 var(--ink);transition:transform .12s}
+.sitem canvas{width:min(100%,96px);aspect-ratio:1;max-width:100%}
+.sitem .iname{font-weight:700;font-size:15px;line-height:1.15;text-align:center;min-height:2.3em}
+.sitem .tag{font-family:var(--display);font-size:15px;display:inline-flex;align-items:center;gap:5px}
+.sitem .tag::before{content:"";width:13px;height:13px;border-radius:50%;background:#e2bd62;border:2px solid var(--ink)}
+.sitem .soon{align-self:stretch;margin-top:4px;background:var(--wine);color:var(--paper);font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:5px 0;text-align:center;border-top:3px solid var(--ink)}
+.sitem.sel,.sitem:hover{transform:translateY(-4px);outline:3px dashed #f3d27a;outline-offset:3px}
+.sitem:focus-visible{outline:3px dashed #f3d27a;outline-offset:3px}
+.shopbody{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;align-items:start}
+.detail{display:grid;grid-template-columns:1fr;justify-items:center;text-align:center;gap:6px;margin-top:34px;background:var(--paper);border:3px solid var(--ink);border-radius:12px;padding:10px 16px}
+.detail canvas{width:150px;height:150px}
+.dtext h3{font-family:var(--display);font-weight:400;font-size:clamp(20px,3.6vw,26px);margin:8px 0 2px;color:var(--navy)}
+.dtext p{margin:4px 0;font-size:16px;line-height:1.35}
+.dtext .price b{color:var(--wine)}
+.dsoon{display:inline-block;font-family:var(--display);font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:var(--wine);color:var(--paper);padding:3px 10px;border-radius:4px}
+#shop .keyhint{color:var(--paper);text-align:center}
+@media (max-width:760px){.shopbody{grid-template-columns:1fr}.detail{margin-top:14px}.detail canvas{width:110px;height:110px}}
+@media (max-width:560px){.items{gap:8px}.sitem .iname{font-size:13px}.sitem .soon{font-size:9.5px;letter-spacing:.02em}}
 .touch{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);display:none;pointer-events:auto}
 @media (pointer:coarse){.touch{display:block}.help{display:none}}
 #stick{left:max(18px,env(safe-area-inset-left,0px));width:120px;height:120px;border-radius:50%;border:3px solid rgba(239,226,194,.7);background:rgba(42,29,23,.25)}
@@ -127,6 +155,23 @@ html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(-
 <div id="objective" class="chip" hidden></div>
 <div id="zone" hidden></div>
 <div id="signUI" hidden><button class="btn" id="bClear" type="button">Borrar</button><button class="btn sel" id="bSign" type="button" disabled>Firmar</button></div>
+
+<div id="shop" class="overlay" hidden>
+  <div class="shopbox" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+    <div class="awning" aria-hidden="true"></div>
+    <div class="shophead"><h2 id="shTitle">Caseta de tiro</h2><div class="purse">Tus monedas <b id="shCoins">0</b></div></div>
+    <div class="shopbody"><div class="shelves">
+    <div class="shelf"><div class="shelfname">Armas</div><div class="items" id="shWeapons"></div></div>
+    <div class="shelf"><div class="shelfname">Objetos</div><div class="items" id="shItems"></div></div>
+    </div>
+    <div class="detail">
+      <canvas id="shArt" width="240" height="240"></canvas>
+      <div class="dtext"><span class="kind" id="shKind">Arma</span><h3 id="shName"></h3><p id="shDesc"></p><p class="price">Precio: <b id="shPrice"></b> monedas</p><p class="dsoon">Próximamente</p><p id="shMsg" class="wmsg"></p></div>
+    </div></div>
+    <div class="btns"><button class="btn" id="shBuy" type="button" disabled>Comprar</button><button class="btn sel" id="shClose" type="button">Salir</button></div>
+    <div class="keyhint">Flechas: elegir · Z: comprar · X / Esc: salir</div>
+  </div>
+</div>
 
 <div id="dialog" hidden><div class="who" id="dWho"></div><div id="dText"></div><div class="more">Z ▸</div></div>
 
@@ -734,14 +779,7 @@ function buildWorld(){
   // puntos de interacción
   const lv=(id,x,y,r)=>interactables.push({x,y,r,type:'level',id,h:id==='carpa'?120:90});
   lv('carrusel',720,1388,70);lv('risa',1335,812,62);lv('montana',1960,1196,66);lv('canon',248,402,62);lv('noria',1330,262,58);lv('carpa',1300,1345,66);
-  interactables.push({x:2478,y:392,r:62,type:'talk',who:'Caseta de tiro',h:70,lines:()=>[
-    '¡Pasen y vean! Aquí se venden las armas de la feria.',
-    'Bolas de malabares explosivas: se lanzan en arco y estallan al caer.',
-    'Tartas granada: crema por fuera y metralla por dentro.',
-    'Sifones de ácido: un chorro que lo derrite todo.',
-    state.coins<4?`Llevas ${state.coins} de 4 monedas. Hay más escondidas por la isla.`:'¡Cuatro monedas! Ya puedes comprar tu primera arma.']});
-  liveObj(650,1495,drawBalloon,[-110,-270,70,16],{dy:-8,rx:40,ry:14});
-  interactables.push({x:650,y:1530,r:58,type:'travel',h:110});
+  interactables.push({x:2478,y:392,r:62,type:'shop',h:70});
   interactables.push({x:1400,y:1392,r:46,type:'talk',who:'Poste indicador',h:40,lines:()=>['Arriba: Casa de la Risa y la Noria. Izquierda: Carrusel y Cañón. Derecha: Montaña Rusa y la caseta de tiro.']});
   interactables.push({x:600,y:915,r:58,type:'striker',who:'Martillo de fuerza',h:70});
   interactables.push({x:1140,y:1610,r:46,type:'talk',who:'Taquilla',h:40,lines:()=>['Bienvenido a la Isla Cascabel.','Cada atracción es un nivel. La Gran Carpa guarda al jefe final.']});
@@ -1048,12 +1086,14 @@ function mapAction(){
     else if(current.type==='talk')talk(current.who,current.lines());
     else if(current.type==='striker')hitStriker();
     else if(current.type==='travel')openWorlds();
+    else if(current.type==='shop')openShop();
   } else if(mode==='card')goLevel();
   else if(mode==='dialog')advance();
   else if(mode==='stage')backFromStage();
   else if(mode==='worlds')pickWorld();
+  else if(mode==='shop')shopBuy();
 }
-function mapBack(){if(mode==='worlds')closeWorlds();else if(mode==='card')closeCard();else if(mode==='dialog')advance();else if(mode==='stage')backFromStage()}
+function mapBack(){if(mode==='shop')closeShop();else if(mode==='worlds')closeWorlds();else if(mode==='card')closeCard();else if(mode==='dialog')advance();else if(mode==='stage')backFromStage()}
 addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(e.repeat){keys[e.code]=true;return}
@@ -1770,7 +1810,7 @@ addEventListener('keydown',e=>{if(scene!=='pizza'||e.repeat)return;if(e.code==='
 SC.map={
   enter(){mode='map'},
   update(dt){updateMap(dt)},
-  render(){renderMap()},
+  render(){renderMap();if(mode==='shop')shopFrame()},
   action(){mapAction()}
 };
 function enterMap(){
@@ -1778,6 +1818,94 @@ function enterMap(){
   cam.x=player.x;cam.y=player.y-30;setScene('map');
   const b=$('banner');b.hidden=false;b.style.transition='none';b.style.opacity=1;void b.offsetWidth;b.style.transition='';setTimeout(()=>{b.style.opacity=0},2600);
 }
+
+/* ---------- tienda: caseta de tiro ---------- */
+function iconBombs(g,tt){
+  [[32,74,C.red,C.cream],[60,46,C.navy,C.gold],[88,74,C.teal,C.cream]].forEach(([x,y,c1,c2],i)=>{y+=Math.sin(tt*3+i*2)*3;
+    shadowB(g,x,100,14,4);
+    oval(g,x,y,17,17,c1,{lw:3},()=>{g.fillStyle=c2;g.fillRect(x-20,y-4,40,8)});
+    fig(g,[[x+8,y-14],[x+13,y-23],[x+20,y-25]],{closed:false,lw:2.6,amt:.3});
+    star(g,x+21,y-27,4+Math.abs(Math.sin(tt*14+i))*3,C.goldL)});
+}
+function iconPie(g,tt){
+  shadowB(g,60,100,40,6);
+  fig(g,[[20,80],[100,80],[92,98],[28,98]],{fill:'#b9c1c9',lw:3});
+  oval(g,60,80,41,12,'#e2b25c',{lw:3});
+  puff(g,[[60,68,30,14],[42,73,16,9],[78,73,16,9]],'#fffaf0','200,190,170','255,255,255',2.4);
+  const b=Math.sin(tt*4)*2;
+  oval(g,64,46+b,13,16,'#6f7a3c',{lw:2.8},()=>{g.strokeStyle='rgba(30,40,10,.6)';g.lineWidth=1.6;[-6,0,6].forEach(d=>{g.beginPath();g.moveTo(52,46+b+d);g.lineTo(76,46+b+d);g.stroke()})});
+  fig(g,rectP(58,26+b,70,33+b),{fill:'#8a8478',lw:2.2});
+  fig(g,[[70,30+b],[82,40+b],[78,44+b],[68,34+b]],{fill:'#8a8478',lw:2});
+  g.strokeStyle=C.ink;g.lineWidth=2.6;g.beginPath();g.arc(52,26+b,6,0,7);g.stroke();
+  blot(g,46,82,3,3,C.red);
+}
+function iconSiphon(g,tt){
+  shadowB(g,60,104,28,5);
+  fig(g,rectP(40,42,80,104),{fill:'rgba(190,225,205,.7)',lw:3},()=>{const lv=62+Math.sin(tt*2)*2;g.fillStyle='#8cc04d';g.fillRect(36,lv,48,50);
+    for(let i=0;i<4;i++){const y=100-((tt*30+i*13)%38);blot(g,48+i*7,y,2,2,'rgba(255,255,255,.7)')}});
+  oval(g,60,84,11,10,C.cream,{lw:2.2});blot(g,56,83,2.4,2.6,C.ink);blot(g,64,83,2.4,2.6,C.ink);fig(g,[[55,91],[65,91]],{closed:false,lw:1.6,amt:0});
+  fig(g,[[38,42],[82,42],[77,24],[43,24]],{fill:'#b9c1c9',lw:3});
+  fig(g,[[76,28],[104,22],[104,31],[78,35]],{fill:'#b9c1c9',lw:2.6});
+  fig(g,[[48,24],[70,9],[75,14],[55,28]],{fill:'#8a8478',lw:2.4});
+  const d=(tt*40)%20;fig(g,[[104,28+d],[107,34+d],[104,37+d],[101,34+d]],{fill:'#8cc04d',lw:1.6,amt:.2});
+}
+function iconNose(g,tt){
+  const s=1+Math.sin(tt*5)*.04;shadowB(g,60,98,28,5);
+  g.save();g.translate(60,60);g.scale(s,s);oval(g,0,0,30,30,C.red,{lw:3.4});blot(g,-10,-12,8,6,'rgba(255,255,255,.55)');g.restore();
+  label(g,'+1',94,28,22,C.cream,C.ink);
+}
+function iconSpring(g,tt){
+  const c=Math.sin(tt*4)*4;shadowB(g,60,104,34,5);
+  fig(g,rectP(36,98,84,104),{fill:'#8a8478',lw:2.4});
+  for(let i=0;i<5;i++){g.strokeStyle=C.ink;g.lineWidth=4;g.beginPath();g.ellipse(60,96-i*(6+c/5),18,4,0,0,Math.PI*2);g.stroke();g.strokeStyle='#cfd5da';g.lineWidth=2;g.stroke()}
+  const y=62-c;
+  fig(g,[[22,y],[66,y-6],[92,y],[98,y-14],[106,y-10],[100,y+12],[26,y+16]],{fill:C.wine,lw:3});
+  oval(g,104,y-14,5,5,C.goldL,{lw:1.8});fig(g,[[30,y+16],[96,y+12]],{closed:false,lw:2,stroke:C.gold,amt:.3});
+}
+function iconHorn(g,tt){
+  shadowB(g,66,100,40,5);
+  const sq=1-Math.abs(Math.sin(tt*3))*.12;
+  g.save();g.translate(30,62);g.scale(sq,1/sq);oval(g,0,0,16,19,C.red,{lw:3});blot(g,-5,-7,4,5,'rgba(255,255,255,.5)');g.restore();
+  fig(g,[[44,56],[78,48],[100,32],[100,92],[78,76],[44,68]],{fill:C.goldL,lw:3});
+  oval(g,100,62,7,31,C.gold,{lw:3});
+  [0,1].forEach(i=>{g.strokeStyle=`rgba(42,29,23,${.6-i*.25})`;g.lineWidth=2.4;g.beginPath();g.arc(100,62,40+i*12+(tt*30%10),-.5,.5);g.stroke()});
+}
+const SHOP=[
+  {cat:'Arma',name:'Bolas de malabares explosivas',desc:'Se lanzan en arco y estallan al caer. Perfectas para enemigos que se esconden detrás de algo.',price:4,icon:iconBombs},
+  {cat:'Arma',name:'Tarta granada',desc:'Crema por fuera, metralla por dentro. Explota al dar en el blanco.',price:4,icon:iconPie},
+  {cat:'Arma',name:'Sifón de ácido',desc:'Un chorro continuo de corto alcance que lo derrite todo.',price:4,icon:iconSiphon},
+  {cat:'Objeto',name:'Nariz de repuesto',desc:'Un golpe extra de vida. Por si acaso.',price:3,icon:iconNose},
+  {cat:'Objeto',name:'Zapatos de muelle',desc:'Saltos más altos. Aterrizar bien ya es otro tema.',price:3,icon:iconSpring},
+  {cat:'Objeto',name:'Bocina de payaso',desc:'Un bocinazo que aturde a los enemigos cercanos.',price:3,icon:iconHorn}
+];
+let shopSel=0,shopBuilt=false;
+function paintIcon(cvs,it,tt){const g=cvs.getContext('2d'),k=cvs.width/120;g.setTransform(k,0,0,k,0,0);g.clearRect(0,0,120,120);it.icon(g,tt)}
+function buildShop(){
+  if(shopBuilt)return;shopBuilt=true;
+  SHOP.forEach((it,i)=>{
+    const b=document.createElement('button');b.type='button';b.className='sitem';
+    const c=document.createElement('canvas');c.width=c.height=200;
+    const n=document.createElement('span');n.className='iname';n.textContent=it.name;
+    const p=document.createElement('span');p.className='tag';p.textContent=it.price;
+    const s=document.createElement('span');s.className='soon';s.textContent='Próximamente';
+    b.append(c,n,p,s);b.onclick=e=>{e.stopPropagation();shopSel=i;markShop();shopBuy()};b.onmouseenter=()=>{shopSel=i;markShop()};
+    $(i<3?'shWeapons':'shItems').append(b);it.el=b;it.cv=c;
+  });
+}
+function markShop(){
+  SHOP.forEach((it,i)=>it.el.classList.toggle('sel',i===shopSel));
+  const it=SHOP[shopSel];$('shKind').textContent=it.cat;$('shName').textContent=it.name;$('shDesc').textContent=it.desc;$('shPrice').textContent=it.price;$('shMsg').textContent='';
+}
+function openShop(){buildShop();mode='shop';shopSel=0;markShop();$('shCoins').textContent=state.coins;$('shop').hidden=false}
+function closeShop(){$('shop').hidden=true;mode='map'}
+function shopBuy(){$('shMsg').textContent=`${SHOP[shopSel].name}: próximamente. Todavía no está a la venta.`}
+function shopFrame(){SHOP.forEach((it,i)=>paintIcon(it.cv,it,i===shopSel?t:0));paintIcon($('shArt'),SHOP[shopSel],t)}
+addEventListener('keydown',e=>{
+  if(scene!=='map'||mode!=='shop')return;
+  const m={ArrowLeft:-1,KeyA:-1,ArrowRight:1,KeyD:1,ArrowUp:-3,KeyW:-3,ArrowDown:3,KeyS:3}[e.code];
+  if(m){e.preventDefault();shopSel=(shopSel+m+SHOP.length)%SHOP.length;markShop()}
+});
+$('shClose').onclick=e=>{e.stopPropagation();closeShop()};
 
 /* ---------- acción global y bucle ---------- */
 function action(){if(iris.dir)return;const s=SC[scene];if(s&&s.action)s.action()}
