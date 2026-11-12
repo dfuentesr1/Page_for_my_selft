@@ -67,19 +67,19 @@ const groundTex=paintTex(1024,1024,(g,W,H)=>{const r=rnd(42);g.fillStyle='#b2c27
   g.strokeStyle='rgba(84,108,52,.7)';g.lineWidth=2;for(let i=0;i<500;i++){const x=r()*W,y=r()*H;for(let k=-1;k<=1;k++){g.beginPath();g.moveTo(x+k*4,y);g.quadraticCurveTo(x+k*5,y-5,x+k*7,y-9-(k?0:3));g.stroke()}}
   for(let i=0;i<180;i++){const x=r()*W,y=r()*H;g.fillStyle=['#fff3d8','#e2bd62','#d4574a','#e6a0a6'][i%4];g.beginPath();g.arc(x,y,3,0,7);g.fill()}
   /* camino */
-  const P=[[.5,.98],[.5,.62],[.32,.5],[.18,.5],[.5,.62],[.7,.42]].map(([x,y])=>[x*W,y*H]);
+  const P=[[.5,.8],[.5,.62],[.32,.5],[.18,.5],[.5,.62],[.7,.42]].map(([x,y])=>[x*W,y*H]);
   const path=()=>{g.beginPath();g.moveTo(...P[0]);g.lineTo(...P[1]);g.quadraticCurveTo(.38*W,.52*H,...P[3]);g.moveTo(...P[1]);g.quadraticCurveTo(.62*W,.55*H,...P[5])};
   g.lineJoin=g.lineCap='round';path();g.lineWidth=70;g.strokeStyle='rgba(42,29,23,.55)';g.stroke();path();g.lineWidth=64;g.strokeStyle='#c4a771';g.stroke();path();g.lineWidth=52;g.strokeStyle='#e8d4a2';g.stroke();
   path();g.lineWidth=20;g.strokeStyle='rgba(255,250,230,.45)';g.stroke();
   for(let i=0;i<400;i++){g.fillStyle='rgba(150,115,70,.35)';g.beginPath();g.ellipse(r()*W,r()*H,3,2,0,0,7);g.globalCompositeOperation='source-atop';g.fill();g.globalCompositeOperation='source-over'}});
 const top=new THREE.Mesh(new THREE.ShapeGeometry(smooth,60),new THREE.MeshToonMaterial({map:groundTex,gradientMap:grad}));
 {const uv=top.geometry.attributes.uv,pos=top.geometry.attributes.position;for(let i=0;i<uv.count;i++)uv.setXY(i,(pos.getX(i)+13*IS)/(26*IS),(pos.getY(i)+13*IS)/(26*IS))}
-top.rotation.x=-Math.PI/2;top.receiveShadow=true;S.add(top);
+top.rotation.x=-Math.PI/2;top.receiveShadow=true;
 const cliffTex=paintTex(512,128,(g,W,H)=>{g.fillStyle='#a77a52';g.fillRect(0,0,W,H);const r=rnd(7);for(let i=0;i<120;i++){g.fillStyle=`rgba(90,58,32,${.15+r()*.25})`;g.beginPath();g.ellipse(r()*W,r()*H,8+r()*20,4+r()*6,0,0,7);g.fill()}
   [.3,.6].forEach(y=>{g.strokeStyle='rgba(80,50,28,.45)';g.lineWidth=3;g.setLineDash([40,18]);g.beginPath();g.moveTo(0,y*H);g.lineTo(W,y*H);g.stroke()});g.setLineDash([]);g.fillStyle='#2a1d17';g.fillRect(0,0,W,6)});
 cliffTex.wrapS=THREE.RepeatWrapping;cliffTex.repeat.set(10,1);
 const cliff=new THREE.Mesh(new THREE.ExtrudeGeometry(smooth,{depth:3.6,bevelEnabled:false,curveSegments:80}),[new THREE.MeshToonMaterial({color:0xa77a52,gradientMap:grad}),new THREE.MeshToonMaterial({map:cliffTex,gradientMap:grad})]);
-cliff.rotation.x=-Math.PI/2;cliff.position.y=-3.605;S.add(cliff);
+cliff.rotation.x=-Math.PI/2;cliff.position.y=-3.605;
 cliff.material.forEach(m=>{m.map=null;m.color.set(0x9c4a2a)});
 /* borde de la isla pintado (tu dibujo): una cinta alrededor de la costa con hierba, tierra, raíces y piedras */
 {const tex=new THREE.TextureLoader().load('borde.png');tex.colorSpace=THREE.SRGBColorSpace;tex.wrapS=THREE.RepeatWrapping;tex.anisotropy=8;
@@ -89,24 +89,50 @@ cliff.material.forEach(m=>{m.map=null;m.color.set(0x9c4a2a)});
    P.push(x,TOP,z,x,TOP-HR,z);U.push(u,1,u,0);if(i){const a=(i-1)*2;I.push(a,a+1,a+2,a+1,a+3,a+2)}}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(U,2));g.setIndex(I);
  const m=new THREE.MeshBasicMaterial({map:tex,alphaTest:.5,side:THREE.DoubleSide});const edge=new THREE.Mesh(g,m);
- edge.scale.set(1.012,1,1.012);S.add(edge)}
+ edge.scale.set(1.012,1,1.012)}
 /* agua con olas dibujadas */
 const waterTex=paintTex(512,512,(g,W,H)=>{g.fillStyle='#78acae';g.fillRect(0,0,W,H);const r=rnd(3);g.lineCap='round';
   for(let i=0;i<70;i++){const x=r()*W,y=r()*H,s=.6+r()*.8;g.strokeStyle='rgba(250,248,235,.75)';g.lineWidth=3;g.beginPath();g.moveTo(x-16*s,y);g.quadraticCurveTo(x-8*s,y-7*s,x,y);g.quadraticCurveTo(x+8*s,y-7*s,x+16*s,y);g.stroke()}});
 waterTex.wrapS=waterTex.wrapT=THREE.RepeatWrapping;waterTex.repeat.set(8,8);
-const water=new THREE.Mesh(new THREE.PlaneGeometry(120,120),new THREE.MeshBasicMaterial({map:waterTex}));water.rotation.x=-Math.PI/2;water.position.y=-3.9;S.add(water);
+const water=new THREE.Mesh(new THREE.PlaneGeometry(120,120),new THREE.MeshBasicMaterial({map:waterTex}));water.rotation.x=-Math.PI/2;water.position.y=-26;S.add(water);
 /* espuma alrededor de la isla */
 const foam=new THREE.Mesh(new THREE.ShapeGeometry(new THREE.Shape(new THREE.SplineCurve(pts.concat([pts[0]]).map(p=>p.clone().multiplyScalar(1.025))).getPoints(200))),new THREE.MeshBasicMaterial({color:0xfaf8eb}));
-foam.rotation.x=-Math.PI/2;foam.position.y=-3.89;S.add(foam);
+
 
 /* cargar modelos */
 const LD=new GLTFLoader();
 async function glb(u){const j=await (await fetch(u)).json();const b=Uint8Array.from(atob(j.glb),c=>c.charCodeAt(0));return new Promise((ok,ko)=>LD.parse(b.buffer,'',ok,ko))}
-const [gCarpa,gCarr,gBuf]=await Promise.all([glb('carpa.json'),glb('carrusel.json'),glb('bufon_v3.json')]);
+const [gCarpa,gCarr,gBuf,gIsla]=await Promise.all([glb('carpa.json'),glb('carrusel.json'),glb('bufon_v3.json'),glb('isla.json')]);
+/* isla 3D de Meshy: se escala al tamaño del mapa y su césped queda a la altura 0 */
+const isla=gIsla.scene;{const b=new THREE.Box3().setFromObject(isla),sz=b.getSize(new THREE.Vector3());const k=36/Math.max(sz.x,sz.z);isla.scale.setScalar(k);isla.updateMatrixWorld(true);
+  const b2=new THREE.Box3().setFromObject(isla),c=b2.getCenter(new THREE.Vector3());isla.position.set(-c.x,0,-c.z);isla.updateMatrixWorld(true);
+  const rc=new THREE.Raycaster(new THREE.Vector3(0,100,0),new THREE.Vector3(0,-1,0));const hs=[];for(const [x,z] of [[0,0],[4,3],[-4,-3],[5,-4],[-5,4]]){rc.set(new THREE.Vector3(x,100,z),new THREE.Vector3(0,-1,0));const h=rc.intersectObject(isla,true)[0];if(h)hs.push(h.point.y)}
+  hs.sort((a,b)=>a-b);isla.position.y-=hs[Math.floor(hs.length/2)];isla.updateMatrixWorld(true);
+  const b3=new THREE.Box3().setFromObject(isla);window.__isla={min:b3.min.toArray(),max:b3.max.toArray()}}
+toonify(isla);S.add(isla);inkOutline(isla,.06);
+/* camino pintado encima del césped */
+const pathTex=paintTex(1024,1024,(g,W,H)=>{const P=[[.5,.8],[.5,.62],[.32,.5],[.18,.5],[.5,.62],[.7,.42]].map(([x,y])=>[x*W,y*H]);
+  const path=()=>{g.beginPath();g.moveTo(...P[0]);g.lineTo(...P[1]);g.quadraticCurveTo(.38*W,.52*H,...P[3]);g.moveTo(...P[1]);g.quadraticCurveTo(.62*W,.55*H,...P[5])};
+  g.lineJoin=g.lineCap='round';path();g.lineWidth=70;g.strokeStyle='rgba(42,29,23,.7)';g.stroke();path();g.lineWidth=64;g.strokeStyle='#c4a771';g.stroke();path();g.lineWidth=52;g.strokeStyle='#e8d4a2';g.stroke();path();g.lineWidth=20;g.strokeStyle='rgba(255,250,230,.45)';g.stroke()});
+const pathM=new THREE.Mesh(new THREE.PlaneGeometry(26*IS,26*IS),new THREE.MeshToonMaterial({map:pathTex,gradientMap:grad,transparent:true,alphaTest:.3,polygonOffset:true,polygonOffsetFactor:-2}));
+pathM.rotation.x=-Math.PI/2;pathM.position.y=.04;pathM.receiveShadow=true;S.add(pathM);
+/* altura del césped bajo cada punto (la isla no es del todo plana) */
+const rcH=new THREE.Raycaster();const groundY=(x,z)=>{rcH.set(new THREE.Vector3(x,60,z),new THREE.Vector3(0,-1,0));const h=rcH.intersectObject(isla,true)[0];return h?h.point.y:null};
+/* flores y matas de hierba en 3D que se mecen */
+const sway=[];{const r=rnd(11),tuftM=new THREE.MeshToonMaterial({color:0x6f9a3a,gradientMap:grad});
+  const petal=[0xfff3d8,0xe6a0a6,0xd4574a,0xf6ecd2].map(c=>new THREE.MeshToonMaterial({color:c,gradientMap:grad}));const ctr=new THREE.MeshToonMaterial({color:0xe2bd62,gradientMap:grad});
+  for(let i=0;i<260;i++){const a=r()*6.283,d=Math.sqrt(r())*15.5,x=Math.cos(a)*d,z=Math.sin(a)*d,y=groundY(x,z);if(y===null||Math.abs(y)>.8)continue;
+    const g=new THREE.Group();g.position.set(x,y,z);
+    if(r()<.35){const st=new THREE.Mesh(new THREE.CylinderGeometry(.02,.025,.45,5),tuftM);st.position.y=.22;g.add(st);
+      const pm=petal[Math.floor(r()*4)];for(let k=0;k<5;k++){const p=new THREE.Mesh(new THREE.SphereGeometry(.075,8,6),pm);p.position.set(Math.cos(k*1.257)*.09,.47,Math.sin(k*1.257)*.09);p.scale.y=.5;g.add(p)}
+      const c=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),ctr);c.position.y=.48;g.add(c)}
+    else{for(let k=0;k<5;k++){const b=new THREE.Mesh(new THREE.ConeGeometry(.045,.42+r()*.2,4),tuftM);b.position.set((k-2)*.05,.2,(r()-.5)*.06);b.rotation.z=(k-2)*.22;g.add(b)}}
+    g.rotation.y=r()*6.28;S.add(g);inkOutline(g,.012);sway.push(g)}}
+const solids=[]
 function place(g,h,x,z,ry=0){const o=g.scene;const b=new THREE.Box3().setFromObject(o),sz=b.getSize(new THREE.Vector3());const k=h/sz.y;o.scale.setScalar(k);
   const b2=new THREE.Box3().setFromObject(o),c=b2.getCenter(new THREE.Vector3());o.position.set(x-c.x,-b2.min.y,z-c.z);o.rotation.y=ry;toonify(o);S.add(o);inkOutline(o,.035);
   const r=Math.max(sz.x,sz.z)*k/2;return {x,z,r:r*.92}}
-const solids=[place(gCarpa,9.5,0,-7.5),place(gCarr,5.6,-9.5,2.2,.3)];
+solids.push(place(gCarpa,9.5,0,-7.5),place(gCarr,5.6,-9.5,2.2,.3));
 /* el bufón */
 const buf=gBuf.scene;{const b=new THREE.Box3().setFromObject(buf);const k=1.55/b.getSize(new THREE.Vector3()).y;buf.scale.setScalar(k);buf.userData.k=k}
 toonify(buf);
@@ -147,7 +173,7 @@ const tv={x:0,y:0};const pad=document.getElementById('pad'),knob=pad.firstElemen
 pad.addEventListener('pointerdown',e=>{pad.setPointerCapture(e.pointerId);mv(e)});pad.addEventListener('pointermove',e=>{if(e.buttons)mv(e)});
 pad.addEventListener('pointerup',()=>{tv.x=tv.y=0;knob.style.transform=''});
 function mv(e){const r=pad.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)/(r.width/2),y=(e.clientY-r.top-r.height/2)/(r.height/2),m=Math.max(1,Math.hypot(x,y));tv.x=x/m;tv.y=y/m;knob.style.transform=`translate(${tv.x*36}px,${tv.y*36}px)`}
-const inIsland=(x,z)=>{let ins=false;const P=pts.map(p=>[p.x*.95,-p.y*.95]);for(let i=0,j=P.length-1;i<P.length;j=i++){const [xi,zi]=P[i],[xj,zj]=P[j];if(((zi>z)!==(zj>z))&&(x<(xj-xi)*(z-zi)/(zj-zi)+xi))ins=!ins}return ins};
+const inIsland=(x,z)=>{if(Math.hypot(x,z)>16.5)return false;const y=groundY(x,z);if(y===null||Math.abs(y)>1)return false;return true;let ins=false;const P=pts.map(p=>[p.x*.95,-p.y*.95]);for(let i=0,j=P.length-1;i<P.length;j=i++){const [xi,zi]=P[i],[xj,zj]=P[j];if(((zi>z)!==(zj>z))&&(x<(xj-xi)*(z-zi)/(zj-zi)+xi))ins=!ins}return ins};
 const blocked=(x,z)=>!inIsland(x,z)||solids.some(s=>Math.hypot(x-s.x,z-s.z)<s.r+.3);
 let yaw=0;const clk=new THREE.Clock();const camPos=new THREE.Vector3();
 document.getElementById('load').remove();
@@ -160,7 +186,7 @@ R.setAnimationLoop(()=>{const dt=Math.min(.05,clk.getDelta()),T=clk.elapsedTime;
     const ty=Math.atan2(ix,iz);let d=ty-yaw;d=Math.atan2(Math.sin(d),Math.cos(d));yaw+=d*(1-Math.exp(-dt*14));buf.rotation.y=yaw}
   const want=moving?acts.walk:acts.idle;if(want!==cur){want.reset().play();cur.crossFadeTo(want,.25,true);cur=want}
   mixer.update(dt);
-  trees.forEach(g=>{g.rotation.z=Math.sin(T*1.4+g.userData.sway)*.025});
+  sway.forEach((g,i)=>{g.rotation.z=Math.sin(T*2.2+i)*.12});player.position.y+=( (groundY(player.position.x,player.position.z)??0)-player.position.y)*.3;trees.forEach(g=>{g.rotation.z=Math.sin(T*1.4+g.userData.sway)*.025});
   waterTex.offset.set(Math.sin(T*.2)*.02,T*.004);
   camPos.copy(player.position).add(CAMOFF);cam.position.lerp(camPos,1-Math.exp(-dt*4));cam.lookAt(cam.position.clone().sub(CAMOFF));
   sun.position.copy(cam.position).sub(CAMOFF).add(new THREE.Vector3(-6,12,7));sun.target.position.copy(cam.position).sub(CAMOFF);
