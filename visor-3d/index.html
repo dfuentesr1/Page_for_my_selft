@@ -1,0 +1,83 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bufón 3D</title>
+<style>
+:root{--bg:#2a1214;--ink:#f6ecd2;--accent:#e2bd62;--panel:rgba(20,8,8,.75)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#2a1214}}
+:root[data-theme="dark"]{--bg:#2a1214}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Georgia,serif;overflow:hidden}
+canvas{display:block}
+.ui{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:calc(100% - 32px)}
+button{font:inherit;font-size:16px;padding:9px 16px;border-radius:10px;border:2px solid var(--accent);background:var(--panel);color:var(--ink);cursor:pointer}
+button.on{background:var(--accent);color:#2a1214}
+.info{position:fixed;top:12px;left:16px;right:16px;font-size:14px;opacity:.85}
+#load{position:fixed;inset:0;display:grid;place-items:center;font-size:18px}
+</style></head><body>
+<div id="load">Cargando el bufón…</div>
+<div class="info">The Circus · prueba Meshy 7.1 · arrastra para girar, rueda para acercar</div>
+<div class="ui"><button data-a="idle" class="on">Quieto</button><button data-a="walk">Andar</button><button data-a="run">Correr</button></div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const r=new THREE.WebGLRenderer({antialias:true});r.setPixelRatio(Math.min(2,devicePixelRatio));r.setSize(innerWidth,innerHeight);r.outputColorSpace=THREE.SRGBColorSpace;r.shadowMap.enabled=true;document.body.prepend(r.domElement);
+const s=new THREE.Scene();s.background=new THREE.Color(0x2a1214);
+const cam=new THREE.PerspectiveCamera(32,innerWidth/innerHeight,.05,50);cam.position.set(1.2,1.0,2.7);
+const oc=new OrbitControls(cam,r.domElement);oc.target.set(0,.6,0);oc.enableDamping=true;oc.update();
+s.add(new THREE.HemisphereLight(0xfff2d8,0x4a2020,1.7));const d=new THREE.DirectionalLight(0xfff0d0,2.2);d.position.set(2,4,3);d.castShadow=true;s.add(d);
+const spot=new THREE.Mesh(new THREE.CircleGeometry(1.4,48),new THREE.MeshStandardMaterial({color:0x8a5a32}));spot.rotation.x=-Math.PI/2;spot.receiveShadow=true;s.add(spot);
+async function glb(u){const j=await (await fetch(u)).json();const b=Uint8Array.from(atob(j.glb),c=>c.charCodeAt(0));return new Promise((ok,ko)=>new GLTFLoader().parse(b.buffer,'',ok,ko))}
+const [g1,g2]=await Promise.all([glb('bufon71_walking.json'),glb('bufon71_running_armature.json')]);
+document.getElementById('load').remove();
+const model=g1.scene;model.traverse(o=>{if(o.isMesh)o.castShadow=true});s.add(model);
+const mixer=new THREE.AnimationMixer(model);
+const walk=g1.animations[0],run=g2.animations[0];
+/* quieto: pose de reposo tomada del andar (pies juntos), con respiración y balanceo propios */
+const rest=THREE.AnimationUtils.subclip(walk,'rest',0,2,30);
+const acts={walk:mixer.clipAction(walk),run:mixer.clipAction(run),idle:mixer.clipAction(rest)};
+acts.idle.timeScale=0;
+let cur=acts.idle;cur.play();
+function go(n){const a=acts[n];if(a===cur)return;a.reset().play();if(n==='idle')a.timeScale=0;cur.crossFadeTo(a,.4,true);cur=a;document.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.a===n))}
+document.querySelectorAll('button').forEach(b=>b.onclick=()=>go(b.dataset.a));window.__go=go;
+/* párpados: se pegan al hueso de la cabeza y bajan sobre los ojos pintados */
+const head=model.getObjectByName('Head');
+/* ojos medidos sobre el modelo (mundo, en reposo): centro, semiancho, semialto, giro */
+const EYES=[{c:[-0.0273,0.7939,0.2384],rx:0.036,ry:0.044,yaw:0.0},{c:[0.0765,0.7927,0.2125],rx:0.03,ry:0.044,yaw:0.45}];
+const skin=new THREE.MeshLambertMaterial({color:0xf8d8bf});
+const lineM=new THREE.MeshBasicMaterial({color:0x1e120e});
+const lids=[];
+model.updateMatrixWorld(true);
+const hq=new THREE.Quaternion(),hs=new THREE.Vector3();head.matrixWorld.decompose(new THREE.Vector3(),hq,hs);
+EYES.forEach(e=>{
+  const piv=new THREE.Group();
+  const q=new THREE.Quaternion().setFromEuler(new THREE.Euler(0,e.yaw,0));
+  const n=new THREE.Vector3(0,0,1).applyQuaternion(q);
+  const wp=new THREE.Vector3(...e.c).addScaledVector(n,0.012);
+  piv.position.copy(head.worldToLocal(wp));
+  piv.quaternion.copy(hq.clone().invert().multiply(q));
+  piv.scale.setScalar(1/hs.x);
+  const lid=new THREE.Mesh(new THREE.BufferGeometry(),skin);
+  const edge=new THREE.Mesh(new THREE.BufferGeometry(),lineM);edge.position.z=.0015;
+  const g=new THREE.Group();g.add(lid);g.add(edge);piv.add(g);head.add(piv);
+  lids.push({g,lid,edge,rx:e.rx*1.22,ry:e.ry*1.12});
+});
+/* párpado = parte del óvalo del ojo por encima de una línea que baja al parpadear (forma curva, borde de tinta) */
+function lidShape(rx,ry,k){const cut=ry-1.9*ry*k,sag=-ry*.22*k,pts=[];
+  const a0=Math.asin(Math.max(-1,Math.min(1,cut/ry)));
+  for(let i=0;i<=24;i++){const a=a0+(Math.PI-2*a0)*i/24;pts.push(new THREE.Vector2(rx*Math.cos(a),ry*Math.sin(a)))}
+  const xe=rx*Math.cos(a0);for(let i=1;i<24;i++){const u=i/24,x=-xe+2*xe*u;pts.push(new THREE.Vector2(x,cut-sag*Math.sin(u*Math.PI)))}
+  return {pts,cut,sag,xe}}
+function setBlink(k){lids.forEach(({g,lid,edge,rx,ry})=>{g.visible=k>.02;if(!g.visible)return;
+  const {pts,cut,sag,xe}=lidShape(rx,ry,Math.min(1,k));lid.geometry.dispose();lid.geometry=new THREE.ShapeGeometry(new THREE.Shape(pts));
+  const c=[];for(let i=0;i<=24;i++){const u=i/24;c.push(new THREE.Vector3(-xe+2*xe*u,cut-sag*Math.sin(u*Math.PI),0))}
+  edge.geometry.dispose();edge.geometry=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(c),24,.0034,5,false)})}
+let next=1.5,bt=-1;window.__blink=()=>{bt=0};
+const clk=new THREE.Clock();
+r.setAnimationLoop(()=>{const dt=Math.min(.05,clk.getDelta()),T=clk.elapsedTime;mixer.update(dt);
+  if(cur===acts.idle){model.position.y=Math.sin(T*2.2)*.004;model.rotation.y=Math.sin(T*.6)*.08}else{model.position.y=0;model.rotation.y*=.9}
+  next-=dt;if(next<=0&&bt<0){bt=0;next=2+Math.random()*3.5;if(Math.random()<.2)next=.35}
+  if(bt>=0){bt+=dt;const u=bt/.16;setBlink(u<1?Math.sin(u*Math.PI):0);if(u>=1)bt=-1}else setBlink(window.__lid||0);
+  oc.update();r.render(s,cam)});
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)});
+window.__cam=cam;window.__oc=oc;window.__THREE=THREE;window.__model=model;window.__head=head;window.__ready=true;
+</script></body></html>
