@@ -138,6 +138,26 @@ function place(g,h,x,z,ry=0){const o=g.scene;const b=new THREE.Box3().setFromObj
 /* el bufón */
 const buf=gBuf.scene;{const b=new THREE.Box3().setFromObject(buf);const k=1.55/b.getSize(new THREE.Vector3()).y;buf.scale.setScalar(k);buf.userData.k=k}
 toonify(buf);
+/* textura pintada sobre el bufón: grano de pincel, rayado de tinta en las sombras y tonos del mapa */
+const brushTex=paintTex(256,256,(g,W,H)=>{g.fillStyle='#808080';g.fillRect(0,0,W,H);const r=rnd(5);g.lineCap='round';
+  for(let i=0;i<900;i++){const x=r()*W,y=r()*H,a=-.5+r()*.5,l=6+r()*18,v=r()<.5?60:200;g.strokeStyle=`rgba(${v},${v},${v},.22)`;g.lineWidth=1.5+r()*3;g.beginPath();g.moveTo(x,y);g.lineTo(x+Math.cos(a)*l,y+Math.sin(a)*l);g.stroke()}
+  for(let i=0;i<1800;i++){const v=r()<.5?40:220;g.fillStyle=`rgba(${v},${v},${v},.18)`;g.fillRect(r()*W,r()*H,1.5,1.5)}});
+brushTex.wrapS=brushTex.wrapT=THREE.RepeatWrapping;
+buf.traverse(o=>{if(!o.isMesh)return;const m=o.material;m.onBeforeCompile=sh=>{sh.uniforms.brush={value:brushTex};
+  sh.fragmentShader='uniform sampler2D brush;\n'+sh.fragmentShader.replace('#include <opaque_fragment>',`
+  { vec2 sp=gl_FragCoord.xy/180.;
+    float b=texture2D(brush,sp).r-.5;                       /* grano de pincel */
+    outgoingLight*=1.12+b*.35;
+    float lum=dot(outgoingLight,vec3(.299,.587,.114));
+    float hl=step(.5,fract((gl_FragCoord.x+gl_FragCoord.y)/5.));   /* rayado diagonal */
+    float hl2=step(.5,fract((gl_FragCoord.x-gl_FragCoord.y)/5.));
+    float shade=smoothstep(.55,.3,lum);
+    outgoingLight=mix(outgoingLight,outgoingLight*.8,shade*hl*.6);
+    outgoingLight=mix(outgoingLight,outgoingLight*.8,smoothstep(.25,.12,lum)*hl2*.6);
+    outgoingLight=mix(outgoingLight,outgoingLight*vec3(1.,.95,.85)+vec3(.03,.02,0.),.3);   /* tono papel del mapa */
+    outgoingLight=floor(outgoingLight*12.+.5)/12.;                /* menos degradado, más gouache */
+  }
+  #include <opaque_fragment>`)};m.needsUpdate=true});
 const player=new THREE.Group();player.add(buf);player.position.set(0,0,0);S.add(player);inkOutline(buf,.018);
 const mixer=new THREE.AnimationMixer(buf);
 const inPlace=c=>{c.tracks.forEach(tr=>{if(/Hips\.position$/.test(tr.name)){const v=tr.values,x0=v[0],z0=v[2];for(let i=0;i<v.length;i+=3){v[i]=x0;v[i+2]=z0}}});return c};
