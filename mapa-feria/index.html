@@ -56,7 +56,7 @@ html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(-
 .wbtn.sel,.wbtn:hover{background:#f6e9c6;outline:3px dashed var(--wine);outline-offset:2px}
 .wmsg{min-height:1.4em;font-style:italic;color:var(--wine)}
 .titleui{pointer-events:none}
-.titleui{align-items:end!important;justify-content:end!important}.titleui .tbox{pointer-events:auto;text-align:right;margin:0 16px 16px 0;transform-origin:100% 100%}.titleui #bPlay{display:none}.titleui .btn{font-size:clamp(13px,1.8vw,18px);padding:6px 14px;opacity:.92}
+.titleui{align-items:end!important;justify-content:end!important}.titleui .tbox{pointer-events:auto;text-align:right;margin:0 16px 16px 0;transform-origin:100% 100%}#titleUI{display:none!important}.titleui .btn{font-size:clamp(13px,1.8vw,18px);padding:6px 14px;opacity:.92}
 .tname{font-family:var(--display);font-weight:400;font-size:clamp(48px,11vw,128px);line-height:.95;margin:0;color:var(--paper);-webkit-text-stroke:3px var(--ink);text-shadow:5px 6px 0 var(--wine),8px 10px 0 var(--ink);text-wrap:balance}
 .tsub{font-family:var(--display);color:var(--goldL,#e2bd62);text-shadow:2px 2px 0 var(--ink);font-size:clamp(15px,2.4vw,22px);letter-spacing:.14em;text-transform:uppercase;margin:12px 0 16px}
 #objective{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:max(16px,env(safe-area-inset-left,0px))}
@@ -1520,47 +1520,44 @@ function toVirtual(e){const r=cv.getBoundingClientRect();return [(e.clientX-r.le
 function bigText(g,text,x,y,lt,size=96){const k=easeBack(clamp(lt/.4,0,1));g.save();g.translate(x,y);g.scale(k,k);g.rotate(-.04);g.font=`${size}px Rye, Georgia, serif`;g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';g.lineWidth=size/6;g.strokeStyle=C.ink;g.strokeText(text,6,8);g.fillStyle=C.ink;g.fillText(text,6,8);g.strokeText(text,0,0);g.fillStyle=C.paper;g.fillText(text,0,0);g.restore()}
 
 /* ---------- título ---------- */
-/* portada: ilustración de fondo + cartel con bombillas de feria que se encienden en cadena */
-const TIT_SIGN=[[0.5631,0.2578],[0.4325,0.2548],[0.4034,0.284],[0.4656,0.2807],[0.8008,0.2826],[0.2529,0.2782],[0.5952,0.2883],[0.2068,0.3053],[0.3343,0.3045],[0.4709,0.3298],[0.5242,0.3404],[0.5945,0.3329],[0.8436,0.3457],[0.4633,0.3654],[0.7756,0.3949],[0.1704,0.4148],[0.7167,0.4061],[0.5157,0.389],[0.6411,0.4124],[0.3397,0.4375],[0.7952,0.4298],[0.4629,0.4349],[0.5204,0.4617],[0.6395,0.4632],[0.817,0.4737],[0.602,0.4767],[0.7119,0.4661],[0.1633,0.4885],[0.5324,0.5028],[0.7085,0.507],[0.4639,0.4998],[0.4045,0.528],[0.5637,0.5262],[0.4812,0.5309],[0.7477,0.5309],[0.2825,0.5565],[0.8311,0.5511],[0.6722,0.547],[0.179,0.5928],[0.8298,0.6023],[0.7416,0.6049],[0.1994,0.6224],[0.7546,0.6385],[0.8074,0.6377],[0.2682,0.3125],[0.6464,0.5242],[0.6438,0.361],[0.7707,0.3176],[0.4026,0.463],[0.2255,0.6263],[0.3335,0.4911],[0.718,0.2946],[0.7758,0.6441],[0.3335,0.3763],[0.2506,0.3712],[0.4353,0.3967],[0.5923,0.5089],[0.831,0.2972],[0.2205,0.2793],[0.4014,0.412],[0.4026,0.3406],[0.3335,0.5446],[0.6891,0.5523],[0.6489,0.2946],[0.2569,0.611],[0.5345,0.2742],[0.7167,0.361],[0.7343,0.2742],[0.3072,0.5906],[0.424,0.5344]],TIT_BG=[[0.4308,0.0515],[0.2272,0.2044],[0.6129,0.6566],[0.1895,0.2288],[0.4578,0.0154],[0.5554,0.6194],[0.2626,0.1746],[0.7997,0.2341],[0.5829,0.6502],[0.5728,0.0547],[0.544,0.0154],[0.3781,0.6481],[0.535,0.5823],[0.5189,0.5462],[0.9799,0.0133],[0.762,0.2065],[0.4368,0.6194],[0.4572,0.5855],[0.4087,0.6492]];
+/* portada: la ilustración tal cual; las letras de CIRCUS llevan bombillas de marquesina antigua y PRESS START es el botón */
+const TIT_SIGN=[[0.3605,0.2505],[0.3455,0.2373],[0.3306,0.2476],[0.3191,0.2673],[0.3115,0.2937],[0.3082,0.3223],[0.307,0.3519],[0.3107,0.3803],[0.3166,0.408],[0.3311,0.4225],[0.3458,0.4231],[0.3605,0.4087],[0.3946,0.2463],[0.3945,0.2777],[0.3944,0.3091],[0.3943,0.3406],[0.3941,0.372],[0.394,0.4034],[0.4419,0.2357],[0.4415,0.2622],[0.4411,0.2887],[0.4407,0.3153],[0.4403,0.3418],[0.4399,0.3684],[0.4395,0.3949],[0.4575,0.2251],[0.4727,0.2321],[0.4829,0.2489],[0.4825,0.2734],[0.4715,0.2922],[0.4563,0.2994],[0.4671,0.3185],[0.4778,0.3461],[0.4886,0.3737],[0.5491,0.2527],[0.5373,0.2351],[0.5252,0.2318],[0.5134,0.2487],[0.5097,0.2752],[0.5072,0.3017],[0.5108,0.3282],[0.5158,0.3532],[0.5277,0.3704],[0.5407,0.371],[0.5545,0.3588],[0.5844,0.2505],[0.5841,0.28],[0.5837,0.3095],[0.5833,0.3391],[0.5891,0.3662],[0.5964,0.3927],[0.6127,0.3983],[0.6267,0.3913],[0.6379,0.3694],[0.6403,0.3411],[0.6412,0.3116],[0.6422,0.2821],[0.6431,0.2527],[0.7198,0.2781],[0.7094,0.2557],[0.6968,0.2442],[0.6807,0.2499],[0.6737,0.2747],[0.6756,0.2996],[0.6859,0.3221],[0.7,0.3368],[0.711,0.3561],[0.7164,0.3834],[0.71,0.4082],[0.6993,0.4277],[0.683,0.4316],[0.6694,0.4211],[0.6575,0.4013]],TIT_BG=[[0.4308,0.0515],[0.2272,0.2044],[0.6129,0.6566],[0.1895,0.2288],[0.4578,0.0154],[0.5554,0.6194],[0.2626,0.1746],[0.7997,0.2341],[0.5829,0.6502],[0.5728,0.0547],[0.544,0.0154],[0.3781,0.6481],[0.535,0.5823],[0.5189,0.5462],[0.9799,0.0133],[0.762,0.2065],[0.4368,0.6194],[0.4572,0.5855],[0.4087,0.6492]],TIT_BTN=[.345,.83,.655,.935];
 SC.title={
-  enter(){this.t0=t;this.flk=TIT_SIGN.map(()=>Math.random()*9);this.dead=TIT_SIGN.map(()=>Math.random()<.06)},
-  action(){$('bPlay').click()},
+  enter(){this.t0=t;this.dead=TIT_SIGN.map(()=>Math.random()<.05);this.press=0},
+  rect(){const bg=IM.tit_fondo;if(!bg)return null;const tall=ch>cw,k=tall?cw*1.25/bg.width:Math.max(cw/bg.width,ch/bg.height),bw=bg.width*k,bh=bg.height*k;return {bg,tall,bw,bh,bx:(cw-bw)/2,by:(ch-bh)/2}},
+  inBtn(px,py){const R=this.rect();if(!R)return false;const u=(px-R.bx)/R.bw,v=(py-R.by)/R.bh;return u>TIT_BTN[0]&&u<TIT_BTN[2]&&v>TIT_BTN[1]&&v<TIT_BTN[3]},
+  start(){if(iris.dir||this.press)return;this.press=t;$('bPlay').click()},
+  action(){this.start()},
   update(){},
   render(){
     ctx.setTransform(dpr,0,0,dpr,0,0);const g=ctx,lt=t-(this.t0||0);g.fillStyle='#14080a';g.fillRect(0,0,cw,ch);
-    const bg=IM.tit_fondo;if(!bg)return;
-    /* fondo a pantalla completa (recorta lo que sobre) */
-    const tall=ch>cw;const k=tall?cw*1.25/bg.width:Math.max(cw/bg.width,ch/bg.height),bw=bg.width*k,bh=bg.height*k,bx=(cw-bw)/2,by=(ch-bh)/2;
+    const R=this.rect();if(!R)return;const {bg,tall,bw,bh,bx,by}=R;
     if(tall){g.save();g.filter='blur(14px) brightness(.45)';const k2=ch/bg.height;g.drawImage(bg,(cw-bg.width*k2)/2,0,bg.width*k2,ch);g.restore()}
     g.drawImage(bg,bx,by,bw,bh);
     const glow=(x,y,r,a)=>{const gr=g.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,`rgba(255,236,150,${a})`);gr.addColorStop(.35,`rgba(255,190,70,${a*.55})`);gr.addColorStop(1,'rgba(255,150,40,0)');g.fillStyle=gr;g.beginPath();g.arc(x,y,r,0,7);g.fill()};
-    /* guirnaldas del fondo: parpadeo suave y desigual */
+    /* guirnaldas del fondo */
     g.save();g.globalCompositeOperation='lighter';
     TIT_BG.forEach(([u,v],i)=>{const a=.25+.25*Math.max(0,Math.sin(t*2.3+i*1.7))+.15*Math.sin(t*13+i);glow(bx+u*bw,by+v*bh,bw*.012,Math.max(0,a))});
     g.restore();
-    /* cartel: tapa el título del fondo, con entrada de rebote y un leve balanceo */
-    const sg=IM.tit_cartel;if(sg){
-      const sw=bw*.5,sh=sw*sg.height/sg.width,cx=bx+bw*.5,cy=by+bh*.255,e=easeBack(clamp(lt/.7,0,1)),sw2=Math.sin(t*1.1)*.006;
-      g.save();g.translate(cx,cy);g.rotate(sw2);g.scale(e,e);g.translate(-sw/2,-sh/2);
-      g.shadowColor='rgba(0,0,0,.6)';g.shadowBlur=sw*.04;g.shadowOffsetY=sw*.015;g.drawImage(sg,0,0,sw,sh);g.shadowColor='transparent';
-      /* bombillas: persecución de 3 en 3 como los carteles antiguos, con alguna que titila y alguna fundida */
-      const step=Math.floor(t*7),boot=clamp((lt-.5)/1.2,0,1);
-      TIT_SIGN.forEach(([u,v],i)=>{const x=u*sw,y=v*sh,r=sw*.0125;
-        let on=((i+step)%3)!==0||Math.floor(t*.5)%3===2;if(i/TIT_SIGN.length>boot)on=false;
-        let lvl=on?1:0;if(this.dead&&this.dead[i])lvl=(Math.sin(t*23+i)>.6&&Math.sin(t*3.1+i)>0)?.6:0;
-        if(Math.floor(t*4)%11===0&&lt>2)lvl=Math.min(lvl,.25+.25*Math.sin(t*40));   // apagón breve de toda la marquesina
-        if(lvl<.5){g.fillStyle='rgba(70,30,10,.55)';g.beginPath();g.arc(x,y,r*.95,0,7);g.fill();g.fillStyle='rgba(255,210,140,.18)';g.beginPath();g.arc(x-r*.3,y-r*.35,r*.3,0,7);g.fill()}
-        else{g.save();g.globalCompositeOperation='lighter';glow(x,y,r*3.6,.8*lvl);g.restore();
-          g.fillStyle=`rgba(255,248,200,${lvl})`;g.beginPath();g.arc(x,y,r*.9,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(x-r*.25,y-r*.3,r*.25,0,7);g.fill()}});
-      g.restore();
-      /* halo cálido general del cartel */
-      g.save();g.globalCompositeOperation='lighter';glow(cx,cy,sw*.55,.07+.03*Math.sin(t*7));g.restore();
-    }
-    /* rayos morados del punk: chispazos irregulares */
+    /* bombillas del título: se encienden en cadena, luego persecución de 3 en 3, todas a la vez y algún apagón */
+    const step=Math.floor(t*7),boot=clamp((lt-.4)/1.6,0,1),r=bw*.0052,N=TIT_SIGN.length;let lit=0;
+    const lv=TIT_SIGN.map((p,i)=>{let on=((i+step)%3)!==0||Math.floor(t*.5)%3===2;if(i/N>boot)on=false;let l=on?1:0;
+      if(this.dead&&this.dead[i])l=(Math.sin(t*23+i)>.6&&Math.sin(t*3.1+i)>0)?.6:0;
+      if(Math.floor(t*4)%31===0&&lt>3)l=Math.min(l,.25+.25*Math.sin(t*40));lit+=l;return l});
+    /* resplandor cálido de las letras según cuántas hay encendidas */
+    g.save();g.globalCompositeOperation='lighter';glow(bx+bw*.5,by+bh*.315,bw*.3,.16*lit/N);g.restore();
+    TIT_SIGN.forEach(([u,v],i)=>{const x=bx+u*bw,y=by+v*bh,l=lv[i];
+      g.fillStyle='rgba(60,22,8,.9)';g.beginPath();g.arc(x,y,r*1.25,0,7);g.fill();                       // casquillo
+      if(l<.5){g.fillStyle='#8a5a2c';g.beginPath();g.arc(x,y,r,0,7);g.fill();g.fillStyle='rgba(255,220,150,.35)';g.beginPath();g.arc(x-r*.3,y-r*.35,r*.32,0,7);g.fill()}
+      else{g.save();g.globalCompositeOperation='lighter';glow(x,y,r*4.2,.75*l);g.restore();
+        g.fillStyle=`rgba(255,244,170,${l})`;g.beginPath();g.arc(x,y,r,0,7);g.fill();g.fillStyle='#fffbe6';g.beginPath();g.arc(x,y,r*.55,0,7);g.fill()}});
+    /* rayos morados del punk */
     const ry=IM.tit_rayos;if(ry){const fl=Math.sin(t*31)*Math.sin(t*7.3),burst=(t%2.7)<.35;const a=burst?(.6+.4*Math.abs(Math.sin(t*60))):Math.max(0,fl)*.45;
       g.save();g.globalCompositeOperation='lighter';g.globalAlpha=a;g.filter='blur(2px)';g.drawImage(ry,bx+bw*.0545,by+bh*.311,bw*.0683,bh*.2378);g.filter='none';g.drawImage(ry,bx+bw*.0545,by+bh*.311,bw*.0683,bh*.2378);g.restore()}
-    /* PRESS START del fondo parpadea */
-    const pa=.5+.5*Math.sin(t*4);g.save();g.globalCompositeOperation='lighter';glow(bx+bw*.5,by+bh*.885,bw*.14,.12*pa);g.restore();
+    /* botón PRESS START de la ilustración: late, y se ilumina al pasar o pulsar */
+    {const [u0,v0,u1,v1]=TIT_BTN,x=bx+u0*bw,y=by+v0*bh,w=(u1-u0)*bw,h=(v1-v0)*bh,pa=.5+.5*Math.sin(t*4),hot=this.hover||this.press;
+      g.save();g.globalCompositeOperation='lighter';g.fillStyle=`rgba(255,210,120,${(hot?.3:.06)+.1*pa})`;g.beginPath();g.roundRect(x,y,w,h,h*.2);g.fill();g.restore();
+      if(Math.sin(t*4)<-.55&&!hot){g.fillStyle='rgba(20,8,10,.35)';g.beginPath();g.roundRect(x+w*.12,y+h*.2,w*.76,h*.6,h*.1);g.fill()}}
   }
 };
 /* ---------- viñetas ---------- */
@@ -2086,7 +2083,8 @@ function loop(now){
   const [ix,iy]=irisCenter();postFX(ix,iy);
   requestAnimationFrame(loop);
 }
-cv.addEventListener('pointerdown',()=>{if(scene==='title')$('bPlay').click()});
+cv.addEventListener('pointerdown',e=>{if(scene==='title'&&SC.title.inBtn(e.clientX,e.clientY))SC.title.start()});
+cv.addEventListener('pointermove',e=>{if(scene==='title'){SC.title.hover=SC.title.inBtn(e.clientX,e.clientY);cv.style.cursor=SC.title.hover?'pointer':''}else if(cv.style.cursor)cv.style.cursor=''});
 $('bPlay').onclick=e=>{e.stopPropagation();if(iris.dir)return;transition(()=>playComic(PAGES.intro,()=>setScene('circus')))};
 $('bSkip').onclick=e=>{e.stopPropagation();if(iris.dir)return;transition(enterMap)};
 $('bSign').onclick=e=>{e.stopPropagation();doSign()};
