@@ -37,13 +37,13 @@ function mkCam(){const a=innerWidth/innerHeight,h=innerWidth<innerHeight?VIEW*1.
 mkCam();const CAMOFF=new THREE.Vector3(0,12,18);
 
 /* luz con sombras duras de dibujo */
-S.add(new THREE.HemisphereLight(0xfff0d0,0xb08860,2.5));
-const sun=new THREE.DirectionalLight(0xfff0d0,1.6);sun.position.set(-6,12,7);sun.castShadow=true;
+S.add(new THREE.HemisphereLight(0xfff0d0,0xc0a080,2.7));
+const sun=new THREE.DirectionalLight(0xfff0d0,1.25);sun.position.set(-6,12,7);sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-20,right:20,top:20,bottom:-20,near:1,far:120});sun.shadow.bias=-.0008;
 S.add(sun);S.add(sun.target);R.shadowMap.enabled=true;R.shadowMap.type=THREE.BasicShadowMap;
 
 /* toon: 3 tonos cortados */
-const grad=(()=>{const d=new Uint8Array([150,150,150,255, 205,205,205,255, 255,255,255,255]);const t=new THREE.DataTexture(d,3,1,THREE.RGBAFormat);t.minFilter=t.magFilter=THREE.NearestFilter;t.needsUpdate=true;return t})();
+const grad=(()=>{const d=new Uint8Array([185,185,185,255, 225,225,225,255, 255,255,255,255]);const t=new THREE.DataTexture(d,3,1,THREE.RGBAFormat);t.minFilter=t.magFilter=THREE.NearestFilter;t.needsUpdate=true;return t})();
 function toonify(root){root.traverse(o=>{if(!o.isMesh)return;o.castShadow=o.receiveShadow=true;
   const mats=Array.isArray(o.material)?o.material:[o.material];
   const nm=mats.map(m=>{const t=new THREE.MeshToonMaterial({map:m.map||null,color:m.map?0xffffff:(m.color||new THREE.Color(0xffffff)),gradientMap:grad});if(o.isSkinnedMesh)t.skinning=true;return t});
@@ -129,7 +129,17 @@ const topTex=paintTex(2048,2048,(g,W,H)=>{const r=rnd(42);g.fillStyle='#a6b04e';
   g.lineCap='round';for(let i=0;i<7000;i++){const x=r()*W,y=r()*H,a=-.3+r()*.6,l=10+r()*26;g.strokeStyle=r()<.5?'rgba(90,105,35,.16)':'rgba(205,205,120,.14)';g.lineWidth=3+r()*5;g.beginPath();g.moveTo(x,y);g.lineTo(x+Math.cos(a)*l,y+Math.sin(a)*l*.5);g.stroke()}
   /* camino de tierra serpenteante con bordes de piedrecitas */
   const P=PATH.map(([x,y])=>[x*W,y*H]);const tr=()=>{g.beginPath();g.moveTo(...P[0]);for(let i=1;i<P.length-1;i++){const mx=(P[i][0]+P[i+1][0])/2,my=(P[i][1]+P[i+1][1])/2;g.quadraticCurveTo(P[i][0],P[i][1],mx,my)}g.lineTo(...P[P.length-1])};
-  g.lineJoin='round';tr();g.lineWidth=96;g.strokeStyle='rgba(120,90,40,.35)';g.stroke();tr();g.lineWidth=80;g.strokeStyle='#d8b878';g.stroke();tr();g.lineWidth=54;g.strokeStyle='#ecd3a0';g.stroke();
+  g.lineJoin='round';
+  const wob=(lw,col,amp,seed)=>{const rr=rnd(seed);for(let i=0;i<P.length-1;i++){const [x0,y0]=P[i],[x1,y1]=P[i+1];for(let u=0;u<1;u+=.06){const x=x0+(x1-x0)*u,y=y0+(y1-y0)*u;g.fillStyle=col;g.beginPath();g.ellipse(x+(rr()-.5)*amp,y+(rr()-.5)*amp,lw/2*(.85+rr()*.3),lw/2*(.85+rr()*.3),rr()*3,0,7);g.fill()}}};
+  tr();g.lineWidth=84;g.strokeStyle='rgba(96,70,30,.5)';g.stroke();wob(88,'rgba(96,70,30,.5)',16,3);
+  tr();g.lineWidth=74;g.strokeStyle='#cfae6c';g.stroke();wob(76,'#cfae6c',14,5);
+  tr();g.lineWidth=50;g.strokeStyle='#e6cb92';g.stroke();wob(52,'#e6cb92',12,7);
+  const rr=rnd(9);for(let i=0;i<4000;i++){const x=rr()*W,y=rr()*H;const d=g.getImageData?0:0;g.fillStyle=rr()<.5?'rgba(150,110,60,.18)':'rgba(255,240,200,.18)';g.save();tr();g.lineWidth=70;g.globalCompositeOperation='source-atop';g.restore()}
+  /* pinceladas y piedrecitas dentro del camino */
+  g.save();tr();g.lineWidth=70;g.strokeStyle='rgba(0,0,0,0)';g.stroke();g.restore();
+  for(let i=0;i<P.length-1;i++){const [x0,y0]=P[i],[x1,y1]=P[i+1];for(let u=0;u<1;u+=.02){const x=x0+(x1-x0)*u+(rr()-.5)*50,y=y0+(y1-y0)*u+(rr()-.5)*50;
+    if(rr()<.5){g.strokeStyle=rr()<.5?'rgba(160,120,70,.35)':'rgba(255,245,215,.35)';g.lineWidth=3+rr()*4;g.beginPath();g.moveTo(x,y);g.lineTo(x+8+rr()*10,y+(rr()-.5)*4);g.stroke()}
+    else if(rr()<.25){g.fillStyle='rgba(140,128,110,.8)';g.strokeStyle='rgba(42,29,23,.7)';g.lineWidth=1.5;g.beginPath();g.ellipse(x,y,3+rr()*3,2+rr()*2,0,0,7);g.fill();g.stroke()}}}
   tr();g.setLineDash([3,14]);g.lineWidth=60;g.strokeStyle='rgba(170,135,80,.5)';g.stroke();g.setLineDash([]);
   for(let i=0;i<500;i++){g.fillStyle='rgba(240,210,140,.5)';g.beginPath();g.arc(r()*W,r()*H,1.5,0,7);g.globalCompositeOperation='source-over';}
 });
@@ -138,8 +148,8 @@ isla.traverse(o=>{if(!o.isMesh)return;const m=o.material;m.onBeforeCompile=sh=>{
   sh.vertexShader='varying vec3 vWP;varying vec3 vWN;\n'+sh.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWP=(modelMatrix*vec4(transformed,1.)).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
   sh.fragmentShader='uniform sampler2D topTex;uniform float isw;varying vec3 vWP;varying vec3 vWN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
    { float inner=1.-smoothstep(isw*.40,isw*.43,length(vWP.xz));float up=max(inner*smoothstep(-.9,-.6,vWP.y),smoothstep(.45,.75,vWN.y)*smoothstep(-.7,-.35,vWP.y))*(1.-smoothstep(isw*.44,isw*.47,length(vWP.xz)));
-     vec3 gc=texture2D(topTex,vWP.xz/isw+.5).rgb;diffuseColor.rgb=mix(diffuseColor.rgb,gc,up); }
-   { float l=dot(diffuseColor.rgb,vec3(.299,.587,.114));diffuseColor.rgb=mix(vec3(l),diffuseColor.rgb,.72)*vec3(1.,.93,.86); }`)};m.needsUpdate=true});
+     vec3 gc=texture2D(topTex,vWP.xz/isw+.5).rgb;diffuseColor.rgb=mix(diffuseColor.rgb,gc,up);
+     float l=dot(diffuseColor.rgb,vec3(.299,.587,.114));float side=1.-up;vec3 dc=mix(vec3(l),diffuseColor.rgb,mix(.72,.5,side));dc*=mix(vec3(1.,.93,.86),vec3(.92,.84,.8),side);diffuseColor.rgb=dc; }`)};m.needsUpdate=true});
 S.add(isla);inkOutline(isla,.06);
 /* sin contorno de tinta sobre el césped interior (quedaban restos negros de las matas quitadas) */
 isla.traverse(o=>{if(!o.userData.ink)return;const m=o.material,prev=m.onBeforeCompile;m.onBeforeCompile=sh=>{prev(sh);
@@ -156,24 +166,25 @@ const pathM=new THREE.Mesh(new THREE.PlaneGeometry(26*IS,26*IS),new THREE.MeshTo
 /* altura del césped bajo cada punto (la isla no es del todo plana) */
 const rcH=new THREE.Raycaster();const groundY=(x,z)=>{rcH.set(new THREE.Vector3(x,60,z),new THREE.Vector3(0,-1,0));const h=rcH.intersectObject(isla,true)[0];return h?h.point.y:null};
 /* hierba dibujada: matas de hojas finas y curvas, en varios verdes, con tinta y movidas por el viento (una sola malla) */
-{const r=rnd(23),parts=[],dark=new THREE.Color(0x6f8c34),mid=new THREE.Color(0x9cb553),light=new THREE.Color(0xd8dc8e),dry=new THREE.Color(0xc9b25a);
- const onPath=(x,z)=>PATH.some(([u,v],i)=>i&&Math.hypot(x-(u-.5)*ISW,z-(.5-v)*ISW)<2.2);
- for(let i=0;i<260;i++){const a=r()*6.283,d=Math.sqrt(r())*ISW*.44,x=Math.cos(a)*d,z=Math.sin(a)*d,y=groundY(x,z);if(y===null||Math.abs(y)>.6||onPath(x,z))continue;
-  const n=6+Math.floor(r()*6),sc=.7+r()*.7,tipC=(r()<.15?dry:light).clone();
-  for(let k=0;k<n;k++){const h=(.35+r()*.45)*sc,w=.075+r()*.045;
-   const geo=new THREE.ConeGeometry(w,h,3,4,true);geo.translate(0,h/2,0);geo.scale(1,1,.5);
-   /* curvar la hoja hacia fuera */
-   const P=geo.attributes.position,lean=.35+r()*.6;for(let j=0;j<P.count;j++){const yy=P.getY(j)/h;P.setX(j,P.getX(j)+yy*yy*lean*h)}
-   const ang=k/n*6.283+r()*.5;geo.rotateY(ang);geo.translate(x+Math.cos(ang)*.04,y-.02,z+Math.sin(ang)*.04);
-   const C=[],H=[];for(let j=0;j<P.count;j++){const t=Math.max(0,(P.getY(j)-y)/h);const c=dark.clone().lerp(mid,Math.min(1,t*1.6)).lerp(tipC,Math.max(0,t-.55)*1.6);C.push(c.r,c.g,c.b);H.push(Math.max(0,P.getY(j)-y))}
+{const r=rnd(23),parts=[],dark=new THREE.Color(0x5d7a2c),mid=new THREE.Color(0x86a443),light=new THREE.Color(0xb9c76a),dry=new THREE.Color(0xc9b25a);
+ const PW=PATH.map(([u,v])=>[(u-.5)*ISW,(.5-v)*ISW]);
+ const onPath=(x,z)=>{for(let i=0;i<PW.length-1;i++){const [ax,az]=PW[i],[bx,bz]=PW[i+1],dx=bx-ax,dz=bz-az;let t=((x-ax)*dx+(z-az)*dz)/(dx*dx+dz*dz);t=Math.max(0,Math.min(1,t));if(Math.hypot(x-ax-dx*t,z-az-dz*t)<2.6)return true}return false};window.__onPath=onPath;
+ for(let i=0;i<170;i++){const a=r()*6.283,d=Math.sqrt(r())*ISW*.44,x=Math.cos(a)*d,z=Math.sin(a)*d,y=groundY(x,z);if(y===null||Math.abs(y)>.6||onPath(x,z))continue;
+  const n=3+Math.floor(r()*3),sc=.9+r()*.6,tipC=(r()<.12?dry:light).clone();
+  for(let k=0;k<n;k++){const h=(.4+r()*.25)*sc,w=.16+r()*.06;
+   const sh=new THREE.Shape();sh.moveTo(-w,0);sh.quadraticCurveTo(-w*.9,h*.55,0,h);sh.quadraticCurveTo(w*.9,h*.55,w,0);sh.lineTo(-w,0);
+   const geo=new THREE.ShapeGeometry(sh,6);
+   const P=geo.attributes.position,lean=(k-(n-1)/2)*.35;for(let j=0;j<P.count;j++){const yy=P.getY(j)/h;P.setX(j,P.getX(j)+yy*yy*lean*h);P.setZ(j,-yy*yy*.12)}
+   const ang=r()*.6-.3;geo.rotateY(ang);geo.translate(x+(k-(n-1)/2)*.1,y-.02,z+(r()-.5)*.06);
+   const C=[],H=[];for(let j=0;j<P.count;j++){const t=Math.max(0,(P.getY(j)-y)/h);const c=dark.clone().lerp(mid,Math.min(1,t*1.4)).lerp(tipC,Math.max(0,t-.6)*1.4);C.push(c.r,c.g,c.b);H.push(Math.max(0,P.getY(j)-y))}
    geo.setAttribute('color',new THREE.Float32BufferAttribute(C,3));geo.setAttribute('hh',new THREE.Float32BufferAttribute(H,1));geo.deleteAttribute('uv');parts.push(geo)}}
  const all=mergeGeometries(parts);all.computeVertexNormals();
- const swayChunk='transformed.x+=sin(windT*2.1+position.x*.35+position.z*.2)*hh*hh*.55;transformed.z+=cos(windT*1.7+position.x*.2)*hh*hh*.25;';
+ const swayChunk='transformed.x+=sin(windT*2.1+position.x*.35+position.z*.2)*hh*hh*.3;transformed.z+=cos(windT*1.7+position.x*.2)*hh*hh*.12;';
  const gm=new THREE.MeshToonMaterial({vertexColors:true,gradientMap:grad,side:THREE.DoubleSide});
  gm.onBeforeCompile=sh=>{sh.uniforms.windT=windU;sh.vertexShader='uniform float windT;attribute float hh;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+swayChunk)};
  const grass=new THREE.Mesh(all,gm);grass.receiveShadow=true;S.add(grass);
  const om=new THREE.MeshBasicMaterial({color:0x2a1d17,side:THREE.BackSide});
- om.onBeforeCompile=sh=>{sh.uniforms.windT=windU;sh.vertexShader='uniform float windT;attribute float hh;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+swayChunk+'transformed+=normalize(normal)*.006;')};
+ om.onBeforeCompile=sh=>{sh.uniforms.windT=windU;sh.vertexShader='uniform float windT;attribute float hh;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+swayChunk+'transformed+=normalize(normal)*.025;transformed.z-=.01;')};
  const gOut=new THREE.Mesh(all,om);S.add(gOut);window.__blades=parts.length}
 /* flores y matas de hierba en 3D que se mecen */
 const sway=[];{const r=rnd(11),tuftM=new THREE.MeshToonMaterial({color:0x6f9a3a,gradientMap:grad});
@@ -198,21 +209,16 @@ const brushTex=paintTex(256,256,(g,W,H)=>{g.fillStyle='#808080';g.fillRect(0,0,W
   for(let i=0;i<900;i++){const x=r()*W,y=r()*H,a=-.5+r()*.5,l=6+r()*18,v=r()<.5?60:200;g.strokeStyle=`rgba(${v},${v},${v},.22)`;g.lineWidth=1.5+r()*3;g.beginPath();g.moveTo(x,y);g.lineTo(x+Math.cos(a)*l,y+Math.sin(a)*l);g.stroke()}
   for(let i=0;i<1800;i++){const v=r()<.5?40:220;g.fillStyle=`rgba(${v},${v},${v},.18)`;g.fillRect(r()*W,r()*H,1.5,1.5)}});
 brushTex.wrapS=brushTex.wrapT=THREE.RepeatWrapping;
-buf.traverse(o=>{if(!o.isMesh)return;const m=o.material;m.onBeforeCompile=sh=>{sh.uniforms.brush={value:brushTex};
-  sh.fragmentShader='uniform sampler2D brush;\n'+sh.fragmentShader.replace('#include <opaque_fragment>',`
-  { vec2 sp=gl_FragCoord.xy/180.;
-    float b=texture2D(brush,sp).r-.5;                       /* grano de pincel */
-    outgoingLight*=1.12+b*.35;
-    float lum=dot(outgoingLight,vec3(.299,.587,.114));
-    float hl=step(.5,fract((gl_FragCoord.x+gl_FragCoord.y)/5.));   /* rayado diagonal */
-    float hl2=step(.5,fract((gl_FragCoord.x-gl_FragCoord.y)/5.));
-    float shade=smoothstep(.55,.3,lum);
-    outgoingLight=mix(outgoingLight,outgoingLight*.8,shade*hl*.6);
-    outgoingLight=mix(outgoingLight,outgoingLight*.8,smoothstep(.25,.12,lum)*hl2*.6);
-    outgoingLight=mix(outgoingLight,outgoingLight*vec3(1.,.95,.85)+vec3(.03,.02,0.),.3);   /* tono papel del mapa */
-    outgoingLight=floor(outgoingLight*12.+.5)/12.;                /* menos degradado, más gouache */
-  }
-  #include <opaque_fragment>`)};m.needsUpdate=true});
+const grad2=(()=>{const d=new Uint8Array([215,215,215,255, 255,255,255,255]);const t=new THREE.DataTexture(d,2,1,THREE.RGBAFormat);t.minFilter=t.magFilter=THREE.NearestFilter;t.needsUpdate=true;return t})();
+buf.traverse(o=>{if(!o.isMesh)return;const m=o.material;m.gradientMap=grad2;
+  m.onBeforeCompile=sh=>{sh.uniforms.brush={value:brushTex};
+   sh.fragmentShader='uniform sampler2D brush;\n'+sh.fragmentShader.replace('#include <opaque_fragment>',`
+   { float b=texture2D(brush,gl_FragCoord.xy/180.).r-.5;
+     float rim=pow(1.-max(0.,dot(normalize(normal),vec3(0.,0.,1.))),3.)*.16;   /* borde de luz */
+     outgoingLight=outgoingLight*1.15*(1.+b*.1)+rim;
+     outgoingLight=mix(outgoingLight,outgoingLight*vec3(1.,.97,.9),.2); }
+   #include <opaque_fragment>`)};m.needsUpdate=true});
+buf.userData.brightLights=true;
 const player=new THREE.Group();player.add(buf);player.position.set(4,0,13);S.add(player);inkOutline(buf,.018);
 const mixer=new THREE.AnimationMixer(buf);
 const inPlace=c=>{c.tracks.forEach(tr=>{if(/Hips\.position$/.test(tr.name)){const v=tr.values,x0=v[0],z0=v[2];for(let i=0;i<v.length;i+=3){v[i]=x0;v[i+2]=z0}}});return c};
@@ -257,7 +263,7 @@ function bunting(x1,z1,x2,z2){const a=flag(x1,z1),b=new THREE.Group();const p=ne
   const pts=[];for(let i=0;i<=20;i++){const u=i/20,v=A.clone().lerp(B,u);v.y-=Math.sin(u*Math.PI)*.35;pts.push(v)}
   const rope=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),40,.012,4),new THREE.MeshBasicMaterial({color:0x2a1d17}));S.add(rope);
   const cols=[0xf2e2c0,0xc94a32,0xd8a840];for(let i=1;i<9;i++){const u=i/9,v=A.clone().lerp(B,u);v.y-=Math.sin(u*Math.PI)*.35;const t=new THREE.Mesh(new THREE.ConeGeometry(.12,.28,3),T(cols[i%3]));t.rotation.x=Math.PI;t.position.copy(v).add(new THREE.Vector3(0,-.15,0));S.add(t);inkOutline(t,.01)}}
-const free=(x,z)=>{const P=PATH.map(([u,v])=>[(u-.5)*ISW,(.5-v)*ISW]);for(const [a,b] of P)if(Math.hypot(x-a,z-b)<1.6)return false;return Math.hypot(x,z)<W2&&Math.hypot(x-player.position.x,z-player.position.z)>1.5};
+const free=(x,z)=>{if(window.__onPath(x,z))return false;return Math.hypot(x,z)<W2&&Math.hypot(x-player.position.x,z-player.position.z)>1.5};
 for(let i=0;i<60;i++){const a=pr()*6.28,d=Math.sqrt(pr())*W2,x=Math.cos(a)*d,z=Math.sin(a)*d;if(free(x,z))daisies(x,z)}
 for(let i=0;i<22;i++){const a=pr()*6.28,d=Math.sqrt(pr())*W2,x=Math.cos(a)*d,z=Math.sin(a)*d;if(free(x,z)){leafy(x,z,.8+pr()*.6);solids.push({x,z,r:.25})}}
 for(let i=0;i<40;i++){const a=pr()*6.28,d=Math.sqrt(pr())*W2*1.05,x=Math.cos(a)*d,z=Math.sin(a)*d;if(free(x,z))pebble(x,z)}
