@@ -119,7 +119,7 @@ const isla=gIsla.scene;{const b=new THREE.Box3().setFromObject(isla),sz=b.getSiz
   for(let i=0;i<I.length;i+=3){A.fromBufferAttribute(P,I[i]).applyMatrix4(o.matrixWorld);B.fromBufferAttribute(P,I[i+1]).applyMatrix4(o.matrixWorld);Cc.fromBufferAttribute(P,I[i+2]).applyMatrix4(o.matrixWorld);
    const cy=(A.y+B.y+Cc.y)/3,cr=Math.hypot((A.x+B.x+Cc.x)/3,(A.z+B.z+Cc.z)/3);n.subVectors(B,A).cross(new THREE.Vector3().subVectors(Cc,A)).normalize();
    const inner=cr<ISW*.43, bump=cy>.3;
-   if(inner&&bump)quit++;else keep.push(I[i],I[i+1],I[i+2])}
+   if(false)quit++;else keep.push(I[i],I[i+1],I[i+2])}
   g.setIndex(keep)});window.__quit=quit}
 toonify(isla);
 /* el césped de arriba se repinta con textura propia (tapa las marcas que dejó Meshy de flores y matas) */
@@ -138,7 +138,8 @@ isla.traverse(o=>{if(!o.isMesh)return;const m=o.material;m.onBeforeCompile=sh=>{
   sh.vertexShader='varying vec3 vWP;varying vec3 vWN;\n'+sh.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWP=(modelMatrix*vec4(transformed,1.)).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
   sh.fragmentShader='uniform sampler2D topTex;uniform float isw;varying vec3 vWP;varying vec3 vWN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
    { float inner=1.-smoothstep(isw*.40,isw*.43,length(vWP.xz));float up=max(inner*smoothstep(-.9,-.6,vWP.y),smoothstep(.45,.75,vWN.y)*smoothstep(-.7,-.35,vWP.y))*(1.-smoothstep(isw*.44,isw*.47,length(vWP.xz)));
-     vec3 gc=texture2D(topTex,vWP.xz/isw+.5).rgb;diffuseColor.rgb=mix(diffuseColor.rgb,gc,up); }`)};m.needsUpdate=true});
+     vec3 gc=texture2D(topTex,vWP.xz/isw+.5).rgb;diffuseColor.rgb=mix(diffuseColor.rgb,gc,up); }
+   { float l=dot(diffuseColor.rgb,vec3(.299,.587,.114));diffuseColor.rgb=mix(vec3(l),diffuseColor.rgb,.72)*vec3(1.,.93,.86); }`)};m.needsUpdate=true});
 S.add(isla);inkOutline(isla,.06);
 /* sin contorno de tinta sobre el césped interior (quedaban restos negros de las matas quitadas) */
 isla.traverse(o=>{if(!o.userData.ink)return;const m=o.material,prev=m.onBeforeCompile;m.onBeforeCompile=sh=>{prev(sh);
