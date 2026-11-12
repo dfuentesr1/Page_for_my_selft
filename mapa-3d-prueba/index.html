@@ -25,6 +25,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 const R=new THREE.WebGLRenderer({antialias:true});R.setPixelRatio(Math.min(2,devicePixelRatio));R.setSize(innerWidth,innerHeight);R.outputColorSpace=THREE.SRGBColorSpace;
 document.body.prepend(R.domElement);
@@ -111,7 +112,34 @@ const isla=gIsla.scene;{const b=new THREE.Box3().setFromObject(isla),sz=b.getSiz
   const rc=new THREE.Raycaster(new THREE.Vector3(0,100,0),new THREE.Vector3(0,-1,0));const hs=[];for(const [x,z] of [[0,0],[4,3],[-4,-3],[5,-4],[-5,4]]){rc.set(new THREE.Vector3(x,100,z),new THREE.Vector3(0,-1,0));const h=rc.intersectObject(isla,true)[0];if(h)hs.push(h.point.y)}
   hs.sort((a,b)=>a-b);isla.position.y-=hs[Math.floor(hs.length/2)];isla.updateMatrixWorld(true);
   const b3=new THREE.Box3().setFromObject(isla);window.__isla={min:b3.min.toArray(),max:b3.max.toArray()}}
-toonify(isla);S.add(isla);inkOutline(isla,.06);
+/* quitar del modelo las flores grandes y matas que trae Meshy: triángulos que sobresalen del césped */
+{isla.updateMatrixWorld(true);const v=new THREE.Vector3();let quit=0;
+ isla.traverse(o=>{if(!o.isMesh)return;const g=o.geometry,P=g.attributes.position;let I=g.index?g.index.array:[...Array(P.count).keys()];const keep=[];
+  const A=new THREE.Vector3(),B=new THREE.Vector3(),Cc=new THREE.Vector3(),n=new THREE.Vector3();
+  for(let i=0;i<I.length;i+=3){A.fromBufferAttribute(P,I[i]).applyMatrix4(o.matrixWorld);B.fromBufferAttribute(P,I[i+1]).applyMatrix4(o.matrixWorld);Cc.fromBufferAttribute(P,I[i+2]).applyMatrix4(o.matrixWorld);
+   const cy=(A.y+B.y+Cc.y)/3,cr=Math.hypot((A.x+B.x+Cc.x)/3,(A.z+B.z+Cc.z)/3);n.subVectors(B,A).cross(new THREE.Vector3().subVectors(Cc,A)).normalize();
+   const inner=cr<ISW*.43, bump=cy>.3;
+   if(inner&&bump)quit++;else keep.push(I[i],I[i+1],I[i+2])}
+  g.setIndex(keep)});window.__quit=quit}
+toonify(isla);
+/* el césped de arriba se repinta con textura propia (tapa las marcas que dejó Meshy de flores y matas) */
+const topTex=paintTex(2048,2048,(g,W,H)=>{const r=rnd(42);g.fillStyle='#9fbf5a';g.fillRect(0,0,W,H);
+  for(let i=0;i<520;i++){const x=r()*W,y=r()*H,rr=60+r()*200;const gr=g.createRadialGradient(x,y,0,x,y,rr);const c=r()<.55?'110,150,60':'200,220,130';gr.addColorStop(0,`rgba(${c},.35)`);gr.addColorStop(1,`rgba(${c},0)`);g.fillStyle=gr;g.fillRect(x-rr,y-rr,rr*2,rr*2)}
+  g.lineCap='round';for(let i=0;i<9000;i++){const x=r()*W,y=r()*H,a=-.5+r(),l=8+r()*20;g.strokeStyle=r()<.5?'rgba(80,120,45,.2)':'rgba(230,240,180,.2)';g.lineWidth=2+r()*4;g.beginPath();g.moveTo(x,y);g.lineTo(x+Math.cos(a)*l,y+Math.sin(a)*l*.6);g.stroke()}
+  for(let i=0;i<2500;i++){g.fillStyle=r()<.5?'rgba(60,90,30,.25)':'rgba(250,250,220,.25)';g.beginPath();g.arc(r()*W,r()*H,1+r()*2,0,7);g.fill()}});
+topTex.wrapS=topTex.wrapT=THREE.RepeatWrapping;
+isla.traverse(o=>{if(!o.isMesh)return;const m=o.material;m.onBeforeCompile=sh=>{sh.uniforms.topTex={value:topTex};sh.uniforms.isw={value:ISW};
+  sh.vertexShader='varying vec3 vWP;varying vec3 vWN;\n'+sh.vertexShader.replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvWP=(modelMatrix*vec4(transformed,1.)).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
+  sh.fragmentShader='uniform sampler2D topTex;uniform float isw;varying vec3 vWP;varying vec3 vWN;\n'+sh.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+   { float inner=1.-smoothstep(isw*.40,isw*.43,length(vWP.xz));float up=max(inner*smoothstep(-.9,-.6,vWP.y),smoothstep(.45,.75,vWN.y)*smoothstep(-.7,-.35,vWP.y))*(1.-smoothstep(isw*.44,isw*.47,length(vWP.xz)));
+     vec3 gc=texture2D(topTex,vWP.xz/isw+.5).rgb;diffuseColor.rgb=mix(diffuseColor.rgb,gc,up); }`)};m.needsUpdate=true});
+S.add(isla);inkOutline(isla,.06);
+/* sin contorno de tinta sobre el césped interior (quedaban restos negros de las matas quitadas) */
+isla.traverse(o=>{if(!o.userData.ink)return;const m=o.material,prev=m.onBeforeCompile;m.onBeforeCompile=sh=>{prev(sh);
+  sh.vertexShader='varying vec3 vWP;\n'+sh.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nvWP=(modelMatrix*vec4(transformed,1.)).xyz;');
+  sh.fragmentShader='varying vec3 vWP;\n'+sh.fragmentShader.replace('void main() {','void main() {\nif(length(vWP.xz)<'+(ISW*.42).toFixed(2)+'&&vWP.y>-.9)discard;')};m.needsUpdate=true});
+const windU={value:0};
+
 /* camino pintado encima del césped */
 const pathTex=paintTex(1024,1024,(g,W,H)=>{const P=[[.5,.8],[.5,.62],[.32,.5],[.18,.5],[.5,.62],[.7,.42]].map(([x,y])=>[x*W,y*H]);
   const path=()=>{g.beginPath();g.moveTo(...P[0]);g.lineTo(...P[1]);g.quadraticCurveTo(.38*W,.52*H,...P[3]);g.moveTo(...P[1]);g.quadraticCurveTo(.62*W,.55*H,...P[5])};
@@ -120,6 +148,25 @@ const pathM=new THREE.Mesh(new THREE.PlaneGeometry(26*IS,26*IS),new THREE.MeshTo
 
 /* altura del césped bajo cada punto (la isla no es del todo plana) */
 const rcH=new THREE.Raycaster();const groundY=(x,z)=>{rcH.set(new THREE.Vector3(x,60,z),new THREE.Vector3(0,-1,0));const h=rcH.intersectObject(isla,true)[0];return h?h.point.y:null};
+/* hierba dibujada: matas de hojas finas y curvas, en varios verdes, con tinta y movidas por el viento (una sola malla) */
+{const r=rnd(23),parts=[],dark=new THREE.Color(0x5a8a2e),mid=new THREE.Color(0x8cbd48),light=new THREE.Color(0xd2e68a),dry=new THREE.Color(0xc9b25a);
+ for(let i=0;i<900;i++){const a=r()*6.283,d=Math.sqrt(r())*ISW*.44,x=Math.cos(a)*d,z=Math.sin(a)*d,y=groundY(x,z);if(y===null||Math.abs(y)>.6)continue;
+  const n=6+Math.floor(r()*6),sc=.7+r()*.7,tipC=(r()<.15?dry:light).clone();
+  for(let k=0;k<n;k++){const h=(.35+r()*.45)*sc,w=.075+r()*.045;
+   const geo=new THREE.ConeGeometry(w,h,3,4,true);geo.translate(0,h/2,0);geo.scale(1,1,.5);
+   /* curvar la hoja hacia fuera */
+   const P=geo.attributes.position,lean=.35+r()*.6;for(let j=0;j<P.count;j++){const yy=P.getY(j)/h;P.setX(j,P.getX(j)+yy*yy*lean*h)}
+   const ang=k/n*6.283+r()*.5;geo.rotateY(ang);geo.translate(x+Math.cos(ang)*.04,y-.02,z+Math.sin(ang)*.04);
+   const C=[],H=[];for(let j=0;j<P.count;j++){const t=Math.max(0,(P.getY(j)-y)/h);const c=dark.clone().lerp(mid,Math.min(1,t*1.6)).lerp(tipC,Math.max(0,t-.55)*1.6);C.push(c.r,c.g,c.b);H.push(Math.max(0,P.getY(j)-y))}
+   geo.setAttribute('color',new THREE.Float32BufferAttribute(C,3));geo.setAttribute('hh',new THREE.Float32BufferAttribute(H,1));geo.deleteAttribute('uv');parts.push(geo)}}
+ const all=mergeGeometries(parts);all.computeVertexNormals();
+ const swayChunk='transformed.x+=sin(windT*2.1+position.x*.35+position.z*.2)*hh*hh*.55;transformed.z+=cos(windT*1.7+position.x*.2)*hh*hh*.25;';
+ const gm=new THREE.MeshToonMaterial({vertexColors:true,gradientMap:grad,side:THREE.DoubleSide});
+ gm.onBeforeCompile=sh=>{sh.uniforms.windT=windU;sh.vertexShader='uniform float windT;attribute float hh;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+swayChunk)};
+ const grass=new THREE.Mesh(all,gm);grass.receiveShadow=true;S.add(grass);
+ const om=new THREE.MeshBasicMaterial({color:0x2a1d17,side:THREE.BackSide});
+ om.onBeforeCompile=sh=>{sh.uniforms.windT=windU;sh.vertexShader='uniform float windT;attribute float hh;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+swayChunk+'transformed+=normalize(normal)*.006;')};
+ const gOut=new THREE.Mesh(all,om);S.add(gOut);window.__blades=parts.length}
 /* flores y matas de hierba en 3D que se mecen */
 const sway=[];{const r=rnd(11),tuftM=new THREE.MeshToonMaterial({color:0x6f9a3a,gradientMap:grad});
   const petal=[0xfff3d8,0xe6a0a6,0xd4574a,0xf6ecd2].map(c=>new THREE.MeshToonMaterial({color:c,gradientMap:grad}));const ctr=new THREE.MeshToonMaterial({color:0xe2bd62,gradientMap:grad});
@@ -212,7 +259,7 @@ R.setAnimationLoop(()=>{const dt=Math.min(.05,clk.getDelta()),T=clk.elapsedTime;
   waterTex.offset.set(Math.sin(T*.2)*.02,T*.004);
   camPos.copy(player.position).add(CAMOFF);cam.position.lerp(camPos,1-Math.exp(-dt*4));cam.lookAt(cam.position.clone().sub(CAMOFF));
   sun.position.copy(cam.position).sub(CAMOFF).add(new THREE.Vector3(-6,12,7));sun.target.position.copy(cam.position).sub(CAMOFF);
-  look.uniforms.t.value=T;comp.render()});
+  look.uniforms.t.value=T;windU.value=T;comp.render()});
 addEventListener('resize',()=>{mkCam();R.setSize(innerWidth,innerHeight);comp.setSize(innerWidth,innerHeight);look.uniforms.res.value.set(innerWidth,innerHeight);comp.passes[0].camera=cam});
 cam.position.copy(player.position).add(CAMOFF);cam.lookAt(player.position);
 window.__ready=true;
