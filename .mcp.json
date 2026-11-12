@@ -6,6 +6,13 @@
       "headers": {
         "Authorization": "Bearer ${PIXELLAB_API_KEY}"
       }
+    },
+    "meshy": {
+      "command": "npx",
+      "args": ["-y", "@meshy-ai/meshy-mcp-server@0.6.11"],
+      "env": {
+        "MESHY_API_KEY": "msy_placeholder"
+      }
     }
   }
 }
